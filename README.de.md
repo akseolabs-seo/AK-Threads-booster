@@ -1,12 +1,47 @@
 [繁體中文](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Português](README.pt.md) | [हिन्दी](README.hi.md) | [Bahasa Indonesia](README.id.md) | [ภาษาไทย](README.th.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Tiếng Việt](README.vi.md)
 
+<div align="center">
+
+<img src="./assets/readme-banner.svg" alt="AK Threads Booster banner" width="100%">
+
+<p>
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/license-MIT-6ee7b7?style=for-the-badge&logo=open-source-initiative&logoColor=0b0f19"></a>
+  <img alt="Status Alpha" src="https://img.shields.io/badge/status-alpha-f59e0b?style=for-the-badge&logo=target&logoColor=0b0f19">
+  <img alt="Seven Skills" src="https://img.shields.io/badge/modules-7%20skills-60a5fa?style=for-the-badge&logo=buffer&logoColor=0b0f19">
+  <img alt="Snapshot Ready" src="https://img.shields.io/badge/tracker-snapshot--ready-a78bfa?style=for-the-badge&logo=databricks&logoColor=0b0f19">
+  <a href="https://www.threads.com/@darkseoking"><img alt="Follow on Threads" src="https://img.shields.io/badge/Threads-@darkseoking-111827?style=for-the-badge&logo=threads&logoColor=white"></a>
+</p>
+
+</div>
+
+
 # AK-Threads-Booster
+
+> **Current Version**
+> - decision-first `/analyze` flow
+> - tracker-only fallback when full setup files are missing
+> - checkpoint review for all users
+> - API-backed `snapshots[]` and `performance_windows` via `scripts/update_snapshots.py`
 
 Ein Open-Source Claude Code Skill und KI-Schreibassistent, entwickelt speziell fuer Content-Ersteller auf Threads. AK-Threads-Booster analysiert Ihre historischen Beitragsdaten, wendet Forschungsergebnisse aus der Social-Media-Psychologie und Erkenntnisse zum Threads Algorithmus an, um personalisierte Schreibanalysen, Brand Voice Profiling und Entwurfshilfe zu liefern.
 
 Wenn Sie ein datengestuetztes System zur Content-Erstellung fuer Threads suchen, einen KI Schreibassistenten der tatsaechlich aus Ihren eigenen Daten lernt, oder eine fundierte Social Media Strategie auf Basis realer Metriken, dann ist dieses Projekt fuer Sie entwickelt. Kein Template. Kein Regelwerk. Ein Beratungssystem, das Ihnen hilft den Threads Algorithmus zu verstehen und Ihre Daten in eine nachhaltige Wachstumsstrategie umzuwandeln. Funktioniert als Skill / Plugin fuer Claude Code, Cursor, Codex, Windsurf, GitHub Copilot und Google Antigravity.
 
 **Vollstaendig Open-Source. Alle Daten bleiben lokal auf Ihrem Rechner. Keine Cloud-Uebertragung, kein Tracking, keine externen Server.**
+
+
+## Schnellstart
+
+1. Repo in dein AI-Tool einbinden.
+2. `/setup` fuer deine historischen Beitraege ausfuehren.
+3. Nach dem Schreiben `/analyze` nutzen, vor dem Posten optional `/predict`.
+4. Nach dem Posten `/review` fuer 24h- und 72h-Checkpoints verwenden.
+5. Mit Threads API Token kannst du `scripts/update_snapshots.py` fuer Snapshots laufen lassen.
+
+## Datenaktualisierung
+
+- **Checkpoint-Modus**: Fuer alle Nutzer. `/review` sammelt 24h-, 72h- und 7d-Werte und aktualisiert damit die Vorhersagebasis.
+- **Snapshot-Modus**: Mit Threads API. `scripts/update_snapshots.py` schreibt laufend `snapshots[]` und aktualisiert die naechsten `performance_windows`.
 
 ---
 
@@ -32,6 +67,9 @@ Deutsche Nutzer haben spezifische Anforderungen an digitale Werkzeuge, die sich 
 
 Fuer Ersteller, die Threads systematisch und datenbasiert betreiben wollen, ohne die Kontrolle ueber ihre Daten oder ihren Stil abzugeben, ist dieses System konzipiert.
 
+
+
+
 ---
 
 ## Grundprinzipien
@@ -41,6 +79,9 @@ Fuer Ersteller, die Threads systematisch und datenbasiert betreiben wollen, ohne
 **Datengetrieben, nicht regelgetrieben.** Alle Vorschlaege basieren auf Ihren eigenen historischen Daten, nicht auf einer generischen Liste von "10 Social-Media-Marketing-Tipps." Bei unzureichender Datenlage informiert das System Sie ehrlich, anstatt Sicherheit vorzutaeuschen.
 
 **Red Lines sind die einzigen festen Regeln.** Nur Verhaltensweisen, die der Algorithmus von Meta explizit abstraft (Engagement Bait, Clickbait, Wiederveroeffentlichungen mit hoher Aehnlichkeit etc.), loesen direkte Warnungen aus. Alles andere ist beratend. Sie behalten immer die Entscheidungshoheit.
+
+
+
 
 ---
 
@@ -69,6 +110,9 @@ Alle Tool-Versionen enthalten:
 - Richtlinien zum Beraterton (keine Bewertung, keine Korrekturen, kein Ghostwriting)
 - Algorithmus-Red-Line-Regeln (Warnung bei Treffer)
 - Wissensbasis-Referenzen (Psychologie, Algorithmus, KI-Ton-Erkennung)
+
+
+
 
 ---
 
@@ -99,6 +143,9 @@ claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
 
 Wenn Sie Cursor, Windsurf, Codex oder GitHub Copilot verwenden, klonen Sie das Repository einfach in Ihr Projektverzeichnis. Jedes Tool liest automatisch seine entsprechende Konfigurationsdatei.
 
+
+
+
 ---
 
 ## Initialisierung
@@ -124,6 +171,9 @@ Die Initialisierung fuehrt Sie durch:
 3. **Analysebericht** mit den Stilmerkmalen Ihres Accounts und einer Datenuebersicht
 
 Die Initialisierung muss nur einmal ausgefuehrt werden. Nachfolgende Datenaktualisierungen kumulieren sich ueber das `/review`-Modul.
+
+
+
 
 ---
 
@@ -216,6 +266,9 @@ Was es tut:
 - Aktualisiert Tracker und Stilleitfaden
 - Schlaegt optimale Veroeffentlichungszeiten vor
 
+
+
+
 ---
 
 ## Wissensbasis
@@ -240,6 +293,9 @@ Umfasst KI-Spuren auf Satzebene (10 Typen), KI-Spuren auf Strukturebene (5 Typen
 
 Zweck: Erkennungsgrundlinie fuer das KI-Ton-Scanning in `/analyze`. Markiert KI-Spuren, damit Sie diese selbst korrigieren koennen; korrigiert nicht automatisch.
 
+
+
+
 ---
 
 ## Typischer Arbeitsablauf
@@ -258,6 +314,9 @@ Zweck: Erkennungsgrundlinie fuer das KI-Ton-Scanning in `/analyze`. Markiert KI-
 ```
 
 Jeder Zyklus macht die Analysen und Prognosen des Systems praeziser. `/voice` muss nur einmalig ausgefuehrt werden (oder erneut nach Ansammlung weiterer Beitraege). `/draft` referenziert automatisch Ihre Brand Voice Datei.
+
+
+
 
 ---
 
@@ -287,6 +346,9 @@ Generische Tools produzieren Inhalte aus allgemeinen Modellen. Die Analysen und 
 **F: Garantiert dies, dass meine Beitraege viral gehen?**
 Nein. Der Threads Algorithmus ist ein aeusserst komplexes System, und kein Tool kann virale Beitraege garantieren. Was AK-Threads-Booster tut, ist Ihnen zu helfen, auf Basis Ihrer eigenen historischen Daten bessere Entscheidungen zu treffen, bekannte Algorithmus-Red-Lines zu vermeiden und die Wahrscheinlichkeit zu erhoehen, dass jeder Beitrag gut performt -- durch psychologische und datengestuetzte Analyse. Es ist derzeit das umfassendste Threads Content-Erstellungs-Skill, aber die Faktoren, die darueber entscheiden, ob ein Beitrag viral geht -- Timing, Themenrelevanz, Zustand des Publikums, die Verteilungslogik des Algorithmus in dem Moment -- sind zu zahlreich, als dass ein Tool sie vollstaendig kontrollieren koennte. Betrachten Sie es als Ihren Datenberater, nicht als Viralitaetsgarantie.
 
+
+
+
 ---
 
 ## Verzeichnisstruktur
@@ -310,6 +372,8 @@ AK-Threads-booster/
 ├── .github/
 │   └── copilot-instructions.md
 ├── AGENTS.md
+├── assets/
+│   └── readme-banner.svg
 ├── skills/
 │   ├── setup/SKILL.md
 │   ├── voice/SKILL.md
@@ -322,10 +386,19 @@ AK-Threads-booster/
 │   ├── psychology.md
 │   ├── algorithm.md
 │   └── ai-detection.md
+├── scripts/
+│   ├── fetch_threads.py
+│   ├── parse_export.py
+│   ├── update_snapshots.py
+│   └── requirements.txt
 ├── templates/
 │   ├── tracker-template.json
 │   ├── style-guide-template.md
 │   └── concept-library-template.md
+├── examples/
+│   ├── tracker-example.json
+│   ├── style-guide-example.md
+│   └── brand-voice-example.md
 ├── README.md
 ├── README.en.md
 ├── README.ja.md
@@ -333,8 +406,13 @@ AK-Threads-booster/
 └── LICENSE
 ```
 
+
+
+
 ---
 
 ## Lizenz
 
 MIT License. Siehe [LICENSE](./LICENSE).
+
+

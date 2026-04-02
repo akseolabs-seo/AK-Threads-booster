@@ -1,7 +1,7 @@
 ---
 name: draft
 description: "Select a topic and generate a draft based on user's Brand Voice. Draft quality depends on Brand Voice completeness. Trigger words: 'draft', 'write', '寫文', '起草', '幫我寫'"
-allowed-tools: Read, Write, Grep, Glob
+allowed-tools: Read, Write, Grep, Glob, WebSearch, WebFetch
 ---
 
 # AK-Threads-Booster Draft Assistance Module
@@ -63,12 +63,41 @@ If no topic specified, recommend from the topic bank:
 3. Read comment data for audience-interest topics
 4. Recommend 2–3 topics for the user to choose from
 
-### Step 3: Research
+### Step 3: Research & Fact-Check
 
+#### 3a. Local Research
 1. Read `concept_library.md` to check if concepts related to this topic have been explained before
    - Previously explained concepts: No need to re-explain from scratch; reference directly or approach from a more advanced angle
    - New concepts: Need accessible explanation, but avoid turning the post into an explainer
 2. If the topic has corresponding material (summaries in idea folders), read as content foundation
+
+#### 3b. Online Fact-Check & Source Research
+
+Before drafting, use web search to verify and enrich the content:
+
+1. **Fact verification**: Search for any statistics, claims, or technical details that will appear in the post. Verify they are accurate and up-to-date. Flag anything that cannot be verified.
+2. **Source material**: Search for relevant recent articles, studies, case studies, or data that could strengthen the post's arguments. Present 2–3 useful sources to the user as reference material.
+3. **Freshness check**: If the topic involves tools, platforms, or algorithm changes, verify the information is still current (not outdated).
+4. **Counter-arguments**: Briefly search for opposing viewpoints or common criticisms of the topic. Not to include them in the post, but to help the user anticipate potential pushback in comments.
+
+**Present research results to the user before drafting:**
+```
+## Research Results
+
+### Fact-Check
+- [Claim] → [Verified / Needs correction / Could not verify]
+
+### Recommended Source Material
+1. [Source title + URL] — Why it's useful
+2. [Source title + URL] — Why it's useful
+
+### Freshness Notes
+- [Any outdated info or recent changes to be aware of]
+```
+
+The user decides which sources and facts to incorporate. Do not auto-insert unverified claims into the draft.
+
+**If the current environment does not provide native web search:** Prompt the user to provide source URLs or verify key claims manually. List the specific claims that need verification.
 
 ### Step 4: Produce Draft
 

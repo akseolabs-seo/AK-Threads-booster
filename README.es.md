@@ -1,6 +1,27 @@
 [繁體中文](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Português](README.pt.md) | [हिन्दी](README.hi.md) | [Bahasa Indonesia](README.id.md) | [ภาษาไทย](README.th.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Tiếng Việt](README.vi.md)
 
+<div align="center">
+
+<img src="./assets/readme-banner.svg" alt="AK Threads Booster banner" width="100%">
+
+<p>
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/license-MIT-6ee7b7?style=for-the-badge&logo=open-source-initiative&logoColor=0b0f19"></a>
+  <img alt="Status Alpha" src="https://img.shields.io/badge/status-alpha-f59e0b?style=for-the-badge&logo=target&logoColor=0b0f19">
+  <img alt="Seven Skills" src="https://img.shields.io/badge/modules-7%20skills-60a5fa?style=for-the-badge&logo=buffer&logoColor=0b0f19">
+  <img alt="Snapshot Ready" src="https://img.shields.io/badge/tracker-snapshot--ready-a78bfa?style=for-the-badge&logo=databricks&logoColor=0b0f19">
+  <a href="https://www.threads.com/@darkseoking"><img alt="Follow on Threads" src="https://img.shields.io/badge/Threads-@darkseoking-111827?style=for-the-badge&logo=threads&logoColor=white"></a>
+</p>
+
+</div>
+
+
 # AK-Threads-Booster
+
+> **Current Version**
+> - decision-first `/analyze` flow
+> - tracker-only fallback when full setup files are missing
+> - checkpoint review for all users
+> - API-backed `snapshots[]` and `performance_windows` via `scripts/update_snapshots.py`
 
 Una skill open-source de Claude Code y asistente de escritura con IA disenada especificamente para creadores de contenido en Threads. Analiza tus datos historicos de publicaciones, aplica investigacion en psicologia de redes sociales y conocimiento del algoritmo de Threads para ofrecerte analisis personalizado de escritura, perfil de Brand Voice y asistencia en la creacion de borradores.
 
@@ -72,6 +93,31 @@ Todas las versiones incluyen:
 
 ---
 
+## Inicio Rapido
+
+Si quieres empezar sin perder tiempo, este es el orden mas practico:
+
+1. Mete el repositorio en tu entorno de herramientas de IA
+2. Ejecuta `/setup` para importar tus publicaciones historicas
+3. Cuando termines un post, usa `/analyze`
+4. Antes de publicar, usa `/predict` para ver el rango de 24 horas
+5. Despues de publicar, usa `/review` para recuperar checkpoints de 24h / 72h
+6. Si tienes API de Threads, usa `scripts/update_snapshots.py` para actualizar `snapshots[]`
+
+Flujo minimo:
+
+```text
+/setup -> /analyze -> /predict -> publicar -> /review
+```
+
+Flujo con API:
+
+```text
+/setup -> /analyze -> /predict -> publicar -> update_snapshots.py -> /review
+```
+
+---
+
 ## Instalacion
 
 ### Opcion 1: Instalar via GitHub
@@ -123,7 +169,42 @@ La inicializacion te guia a traves de:
 
 3. **Reporte de analisis** mostrando las caracteristicas de estilo de tu cuenta y panorama de datos
 
-La inicializacion solo necesita ejecutarse una vez. Las actualizaciones de datos posteriores se acumulan a traves del modulo `/review`.
+La inicializacion solo necesita ejecutarse una vez. Las actualizaciones de datos posteriores se acumulan a traves del modulo `/review`. Si tienes API de Threads, `scripts/update_snapshots.py` tambien puede completar `snapshots[]` y `performance_windows`.
+
+---
+
+## Modo de Actualizacion de Datos
+
+AK-Threads-Booster tiene dos modos de actualizacion que si son viables en la practica.
+
+### Modo Checkpoint
+
+Si no tienes API, usa este modo.
+
+- `/setup` crea el tracker inicial
+- `/review` recoge los resultados de 24h / 72h / 7d despues de publicar
+- esas cifras corrigen la prediccion futura
+
+### Modo Snapshot
+
+Si tienes API de Threads, usa este modo.
+
+- `scripts/fetch_threads.py` hace la importacion inicial
+- `scripts/update_snapshots.py` refresca metrics de forma periodica
+- el tracker acumula `snapshots[]`
+- `performance_windows` conserva aproximaciones de 24h / 72h / 7d
+
+Ejemplo comun:
+
+```bash
+python scripts/update_snapshots.py --token YOUR_TOKEN --tracker ./threads_daily_tracker.json --recent 10
+```
+
+Para un post especifico:
+
+```bash
+python scripts/update_snapshots.py --token YOUR_TOKEN --tracker ./threads_daily_tracker.json --post-id POST_ID
+```
 
 ---
 
@@ -153,7 +234,7 @@ Salida: `brand_voice.md`, referenciado automaticamente por el modulo `/draft`.
 
 ### 3. /analyze -- Analisis de Escritura (Funcionalidad Principal)
 
-Despues de escribir una publicacion, pega tu contenido para analisis en cuatro dimensiones:
+Despues de escribir una publicacion, pega tu contenido para un analisis decision-first.
 
 ```
 /analyze
@@ -161,12 +242,15 @@ Despues de escribir una publicacion, pega tu contenido para analisis en cuatro d
 [pega el contenido de tu publicacion]
 ```
 
-Cuatro dimensiones de analisis:
+Primero se revisa esto:
 
-- **Comparacion de estilo**: Compara con tu propio estilo historico, senala desviaciones y rendimiento historico
-- **Analisis psicologico**: Mecanismos de Hook, arco emocional, motivacion de compartir, senales de confianza, sesgos cognitivos, potencial de activacion de comentarios
-- **Alineacion con algoritmo**: Escaneo de red lines (advertencias al detectar) + evaluacion de senales positivas
-- **Deteccion de tono IA**: Escaneo de rastros de IA en los niveles de oracion, estructura y contenido
+- **Algorithm Red Lines**: comprueba de entrada lo que puede ser penalizado
+- **Decision Summary**: resume de inmediato el techo de la publicacion y sus riesgos
+- **Highest-Upside Comparisons**: compara con tus publicaciones historicas de mejor rendimiento
+- **Suppression Risks**: detecta lo que puede frenar la distribucion aunque el post sea bueno
+- **Style / Psychology / Algorithm / AI-Tone**: despues va el analisis completo
+
+Si todavia no tienes `style_guide.md`, el analisis puede degradarse a modo `tracker-only` sin romperse.
 
 La deteccion de tono IA es especialmente relevante para la audiencia hispanohablante. Los lectores en espanol tienden a ser particularmente sensibles al contenido que suena artificial o generico, y esta dimension te ayuda a identificar exactamente donde tu texto pierde naturalidad.
 
@@ -206,7 +290,7 @@ Genera estimaciones conservadora/base/optimista (views / likes / replies / repos
 
 ### 7. /review -- Revision Post-Publicacion
 
-Despues de publicar, usa esto para recopilar datos de rendimiento real, comparar con predicciones y actualizar los datos del sistema.
+Despues de publicar, usa esto para recopilar datos de rendimiento real, comparar con predicciones y actualizar los datos del sistema. Si existen, tambien se toman en cuenta `snapshots[]` y `performance_windows`.
 
 ```
 /review
@@ -216,6 +300,7 @@ Lo que hace:
 - Recopila datos de rendimiento real
 - Compara con predicciones y analiza desviaciones
 - Actualiza tracker y guia de estilo
+- Incorpora `snapshots[]` y `performance_windows`
 - Sugiere horarios optimos de publicacion
 
 ---
@@ -251,15 +336,16 @@ Proposito: Linea base de deteccion para el escaneo de tono IA en `/analyze`. Sen
 2. /voice              -- Perfil de Brand Voice profundo (ejecuta una vez)
 3. /topics             -- Ve recomendaciones de temas
 4. /draft [tema]       -- Genera un borrador
-5. /analyze [post]     -- Analiza el borrador o tu propio texto
+5. /analyze [post]     -- Analiza el borrador o tu propio texto con enfoque decision-first
 6. (Edita basandote en el analisis)
 7. /predict [post]     -- Estima rendimiento antes de publicar
 8. (Publica)
-9. /review             -- Recopila datos 24h despues de publicar
-10. Vuelve al paso 3
+9. `scripts/update_snapshots.py` -- Si tienes API, actualiza snapshot
+10. /review            -- Recopila datos 24h despues de publicar
+11. Vuelve al paso 3
 ```
 
-Cada ciclo hace que el analisis y las predicciones del sistema sean mas precisos. `/voice` solo necesita ejecutarse una vez (o re-ejecutarse despues de acumular mas publicaciones). `/draft` referencia automaticamente tu archivo de Brand Voice.
+Cada ciclo hace que el analisis y las predicciones del sistema sean mas precisos. `/voice` solo necesita ejecutarse una vez (o re-ejecutarse despues de acumular mas publicaciones). `/draft` referencia automaticamente tu archivo de Brand Voice. Si no tienes API, puedes omitir `scripts/update_snapshots.py` y usar solo `/review`.
 
 ---
 
@@ -312,6 +398,8 @@ AK-Threads-booster/
 ├── .github/
 │   └── copilot-instructions.md
 ├── AGENTS.md
+├── assets/
+│   └── readme-banner.svg
 ├── skills/
 │   ├── setup/SKILL.md
 │   ├── voice/SKILL.md
@@ -324,10 +412,19 @@ AK-Threads-booster/
 │   ├── psychology.md
 │   ├── algorithm.md
 │   └── ai-detection.md
+├── scripts/
+│   ├── fetch_threads.py
+│   ├── parse_export.py
+│   ├── update_snapshots.py
+│   └── requirements.txt
 ├── templates/
 │   ├── tracker-template.json
 │   ├── style-guide-template.md
 │   └── concept-library-template.md
+├── examples/
+│   ├── tracker-example.json
+│   ├── style-guide-example.md
+│   └── brand-voice-example.md
 ├── README.md
 ├── README.en.md
 ├── README.ja.md

@@ -23,6 +23,7 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 
 try:
     from html.parser import HTMLParser
@@ -140,7 +141,81 @@ def parse_json_export(file_path: str) -> list:
     return posts
 
 
-def extract_post_from_json(item: dict) -> dict | None:
+def build_algorithm_signals() -> dict:
+    """Create an empty algorithm-signals scaffold for a post."""
+    return {
+        "discovery_surface": {
+            "threads": None,
+            "instagram": None,
+            "facebook": None,
+            "profile": None,
+            "topic_feed": None,
+            "other": None,
+        },
+        "topic_graph": {
+            "topic_tag_used": None,
+            "topic_tag_count": None,
+            "topic_match_clarity": None,
+            "single_topic_clarity": None,
+            "bio_topic_match": None,
+        },
+        "topic_freshness": {
+            "semantic_cluster": None,
+            "similar_recent_posts": None,
+            "recent_cluster_frequency": None,
+            "days_since_last_similar_post": None,
+            "freshness_score": None,
+            "fatigue_risk": None,
+        },
+        "originality_risk": {
+            "caption_content_mismatch": None,
+            "hashtag_stuffing_risk": None,
+            "duplicate_cluster_risk": None,
+            "minor_edit_repost_risk": None,
+            "low_value_reaction_risk": None,
+            "fake_engagement_pattern_risk": None,
+        },
+    }
+
+
+def build_psychology_signals() -> dict:
+    """Create an empty psychology-signals scaffold for a post."""
+    return {
+        "hook_payoff": {
+            "hook_strength": None,
+            "payoff_strength": None,
+            "hook_payoff_gap": None,
+        },
+        "share_motive_split": {
+            "dm_forwardability": None,
+            "public_repostability": None,
+            "identity_signal_strength": None,
+            "utility_share_strength": None,
+        },
+        "retellability": None,
+    }
+
+
+def build_review_state() -> dict:
+    """Create an empty review-state scaffold for a post."""
+    return {
+        "last_reviewed_at": None,
+        "actual_checkpoint_hours": None,
+        "deviation_summary": None,
+        "calibration_notes": [],
+        "validated_signals": {
+            "discovery_surface_notes": None,
+            "topic_graph_notes": None,
+            "topic_freshness_notes": None,
+            "originality_risk_notes": None,
+            "hook_payoff_gap_notes": None,
+            "share_motive_split_notes": None,
+            "retellability_notes": None,
+        },
+    }
+
+
+def extract_post_from_json(item: dict) -> Optional[dict]:
     """Extract a post from a single JSON item in Meta export."""
     # Try to find the text content
     text = ""
@@ -193,6 +268,17 @@ def extract_post_from_json(item: dict) -> dict | None:
         "created_at": timestamp,
         "permalink": item.get("permalink", item.get("url", "")),
         "media_type": detect_media_type(item),
+        "is_reply_post": False,
+        "content_type": classify_content_type(text),
+        "topics": [],
+        "hook_type": None,
+        "ending_type": None,
+        "emotional_arc": None,
+        "word_count": count_words(text),
+        "paragraph_count": count_paragraphs(text),
+        "posting_time_slot": build_posting_time_slot(timestamp),
+        "algorithm_signals": build_algorithm_signals(),
+        "psychology_signals": build_psychology_signals(),
         "metrics": {
             "views": 0,
             "likes": 0,
@@ -201,9 +287,19 @@ def extract_post_from_json(item: dict) -> dict | None:
             "quotes": 0,
             "shares": 0,
         },
+        "performance_windows": {
+            "24h": None,
+            "72h": None,
+            "7d": None,
+        },
+        "snapshots": [],
+        "prediction_snapshot": None,
+        "review_state": build_review_state(),
         "comments": [],
-        "content_type": classify_content_type(text),
-        "topics": [],
+        "source": {
+            "import_path": "export",
+            "data_completeness": "partial",
+        },
     }
 
 
@@ -236,6 +332,41 @@ def classify_content_type(text: str) -> str:
     if any(m in text for m in ["我的經驗", "我之前", "那時候", "故事"]):
         return "story"
     return "opinion"
+
+
+def count_words(text: str) -> int:
+    """Estimate word count from whitespace-separated tokens."""
+    return len(text.split()) if text else 0
+
+
+def count_paragraphs(text: str) -> int:
+    """Count non-empty paragraphs."""
+    if not text:
+        return 0
+    return len([chunk for chunk in text.splitlines() if chunk.strip()])
+
+
+def build_posting_time_slot(timestamp: str) -> Optional[str]:
+    """Convert an ISO timestamp into a coarse posting-time bucket."""
+    if not timestamp:
+        return None
+
+    try:
+        dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+    hour = dt.hour
+    if hour < 6:
+        window = "00:00-05:59"
+    elif hour < 12:
+        window = "06:00-11:59"
+    elif hour < 18:
+        window = "12:00-17:59"
+    else:
+        window = "18:00-23:59"
+
+    return f"{dt.strftime('%a')} {window}"
 
 
 class ThreadsHTMLParser(HTMLParser):
@@ -299,6 +430,17 @@ def parse_html_export(file_path: str) -> list:
             "created_at": item.get("timestamp", ""),
             "permalink": "",
             "media_type": "TEXT",
+            "is_reply_post": False,
+            "content_type": classify_content_type(text),
+            "topics": [],
+            "hook_type": None,
+            "ending_type": None,
+            "emotional_arc": None,
+            "word_count": count_words(text),
+            "paragraph_count": count_paragraphs(text),
+            "posting_time_slot": build_posting_time_slot(item.get("timestamp", "")),
+            "algorithm_signals": build_algorithm_signals(),
+            "psychology_signals": build_psychology_signals(),
             "metrics": {
                 "views": 0,
                 "likes": 0,
@@ -307,9 +449,19 @@ def parse_html_export(file_path: str) -> list:
                 "quotes": 0,
                 "shares": 0,
             },
+            "performance_windows": {
+                "24h": None,
+                "72h": None,
+                "7d": None,
+            },
+            "snapshots": [],
+            "prediction_snapshot": None,
+            "review_state": build_review_state(),
             "comments": [],
-            "content_type": classify_content_type(text),
-            "topics": [],
+            "source": {
+                "import_path": "export",
+                "data_completeness": "partial",
+            },
         })
 
     return posts
@@ -321,6 +473,11 @@ def build_tracker(posts: list) -> dict:
     posts.sort(key=lambda p: p.get("created_at", ""), reverse=True)
 
     return {
+        "account": {
+            "handle": "",
+            "source": "export",
+            "timezone": "UTC",
+        },
         "posts": posts,
         "last_updated": datetime.now(timezone.utc).isoformat(),
     }

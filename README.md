@@ -1,14 +1,48 @@
 [繁體中文](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Português](README.pt.md) | [हिन्दी](README.hi.md) | [Bahasa Indonesia](README.id.md) | [ภาษาไทย](README.th.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Tiếng Việt](README.vi.md)
 
+<div align="center">
+
+<img src="./assets/readme-banner.svg" alt="AK Threads Booster banner" width="100%">
+
 # AK體 Threads Booster
 
-> **English Summary:** AK-Threads-booster is a Claude Code and Codex skill and AI writing assistant built specifically for Threads creators. This open-source Threads skill analyzes your historical post data, leverages social media psychology research and the Threads algorithm to provide personalized writing analysis, Brand Voice profiling, and draft assistance. Whether you need an AI social media post generator, actionable Threads tips, a data-backed Threads strategy for sustainable Threads growth and higher Threads engagement, or a ready-to-use content creation skill, this tool turns your own data into insights. Works as a skill / plugin for Claude Code, Cursor, Codex, Windsurf, GitHub Copilot, and Google Antigravity. Not a template -- a consultant skill powered by your data.
+### 把 Threads 經營從猜感覺，變成看你自己的數據
 
-一套專為 Threads 發文設計的 AI Skill，支援 Claude Code、Cursor、Codex、Windsurf、GitHub Copilot、Google Antigravity 等主流 AI 編碼工具。數據驅動的 Threads 經營顧問系統，基於你自己的歷史數據、社交媒體心理學研究、Meta 演算法機制，為你的帳號提供個人化的寫文分析、Brand Voice 建立與初稿輔助。
+給 Threads 創作者的資料驅動 AI Skill 系統。  
+不是通用模板，不是代筆工具，是一套會讀你歷史貼文、幫你做判斷、再把結果回寫進資料庫的內容決策層。
 
-這個 Skill 幫助你掌握 Threads 演算法的運作邏輯，找到屬於你的 Threads 流量密碼，持續產出高互動的 Threads 爆文。包含 7 個獨立 Skill 模組，從初始化、選題、寫文、分析到發文後覆盤，覆蓋完整的 Threads 發文流程。
+<p>
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/license-MIT-6ee7b7?style=for-the-badge&logo=open-source-initiative&logoColor=0b0f19"></a>
+  <img alt="Status Alpha" src="https://img.shields.io/badge/status-alpha-f59e0b?style=for-the-badge&logo=target&logoColor=0b0f19">
+  <img alt="Seven Skills" src="https://img.shields.io/badge/modules-7%20skills-60a5fa?style=for-the-badge&logo=buffer&logoColor=0b0f19">
+  <img alt="Snapshot Ready" src="https://img.shields.io/badge/tracker-snapshot--ready-a78bfa?style=for-the-badge&logo=databricks&logoColor=0b0f19">
+  <a href="https://www.threads.com/@darkseoking"><img alt="Follow on Threads" src="https://img.shields.io/badge/Threads-@darkseoking-111827?style=for-the-badge&logo=threads&logoColor=white"></a>
+</p>
 
-如果你正在尋找一套結合 AI 寫文能力與數據分析的 Threads AI Skill，AK體就是為這個需求設計的。它不靠猜測，靠你自己的數據。關於 AK體背後的 [Threads 演算法與流量研究](https://akseolabs.com/blog/threads-algorithm-traffic)，可以先看這篇了解整套系統的理論基礎。
+<p>
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#初始化流程">初始化流程</a> •
+  <a href="#資料更新模式">資料更新模式</a> •
+  <a href="#七個-skill-的使用說明">七個 Skill</a> •
+  <a href="#目錄結構">目錄結構</a> •
+  <a href="#license">License</a>
+</p>
+
+</div>
+
+> **English Summary:** AK-Threads-booster is a Claude Code and Codex skill system built specifically for Threads creators. It turns your own post history into a working decision layer for topic selection, draft support, post analysis, performance prediction, and post-publish feedback. Not a template. Not a ghostwriter. A data-backed operating system for Threads writing.
+
+一套專為 Threads 發文設計的 AI Skill，支援 Claude Code、Cursor、Codex、Windsurf、GitHub Copilot、Google Antigravity 等主流 AI 工具。核心不是幫你「自動寫」，而是把你自己的歷史數據、社交媒體心理學、Meta 演算法研究，變成可重複使用的決策系統。
+
+它現在已經能做到：
+
+- 匯入歷史貼文，建立 `tracker / style guide / concept library`
+- 寫完一篇文後，用 decision-first 的方式分析它的上限、風險和 AI 味
+- 用歷史資料預估 24 小時表現區間
+- 發文後回收 checkpoint 數據，持續校正整套系統
+- 在有 API 的情況下，自動更新 `snapshots[]`，把單篇貼文的成長曲線寫回 tracker
+
+如果你正在找的不是「多一個 AI 寫手」，而是「一套會越用越準的 Threads 內容系統」，AK 體就是照這個方向做的。關於 AK體背後的 [Threads 演算法與流量研究](https://akseolabs.com/blog/threads-algorithm-traffic)，可以先看這篇了解整套系統的理論基礎。
 
 ---
 
@@ -45,22 +79,48 @@ AK-Threads-booster 支援多種 AI 編碼工具。Claude Code 提供完整的 7 
 | 工具 | 設定檔位置 | 功能範圍 |
 |------|-----------|----------|
 | **Claude Code** | `skills/` 目錄（7 個 Skill） | 完整功能：setup、voice、analyze、topics、draft、predict、review |
-| **Cursor** | `.cursor/rules/ak-threads-booster.mdc` | 核心分析功能（四維度分析） |
-| **Codex** | `AGENTS.md`（根目錄） | 核心分析功能（四維度分析） |
-| **Windsurf** | `.windsurf/rules/ak-threads-booster.md` | 核心分析功能（四維度分析） |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | 核心分析功能（四維度分析） |
-| **Google Antigravity** | `.agents/` 目錄 + 根目錄 `AGENTS.md` | 核心分析功能（四維度分析） |
+| **Cursor** | `.cursor/rules/ak-threads-booster.mdc` | 核心分析功能（decision-first analyze） |
+| **Codex** | `AGENTS.md`（根目錄） | 核心分析功能（decision-first analyze） |
+| **Windsurf** | `.windsurf/rules/ak-threads-booster.md` | 核心分析功能（decision-first analyze） |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | 核心分析功能（decision-first analyze） |
+| **Google Antigravity** | `.agents/` 目錄 + 根目錄 `AGENTS.md` | 核心分析功能（decision-first analyze） |
 
 ### 功能差異說明
 
 - **Claude Code**：完整功能，包含初始化（setup）、Brand Voice 建立（voice）、寫文分析（analyze）、選題推薦（topics）、寫文輔助（draft）、爆文預估（predict）、發文後回饋（review）七個獨立 Skill
-- **其他工具**：提供核心的寫文分析功能（風格比對、心理學分析、演算法對齊檢查、AI 味檢測四個維度），共用同一組知識庫（`knowledge/` 目錄）
-- **Google Antigravity**：同時讀取根目錄 `AGENTS.md`（顧問規範與紅線規則）和 `.agents/` 目錄（rules 規則檔 + skills 分析技能），提供核心四維度分析功能
+- **其他工具**：提供核心的寫文分析功能，包含 decision-first 判斷、紅線掃描、風格比對、心理學分析、演算法對齊檢查、AI 味檢測，共用同一組知識庫（`knowledge/` 目錄）
+- **Google Antigravity**：同時讀取根目錄 `AGENTS.md`（顧問規範與紅線規則）和 `.agents/` 目錄（rules 規則檔 + skills 分析技能），提供核心 analyze 能力
 
 所有工具版本都包含：
 - 顧問語氣規範（不打分、不糾正、不代寫）
 - 演算法紅線規則（命中即警告）
 - 知識庫引用（心理學、演算法、AI 味檢測）
+
+---
+
+## Quick Start
+
+如果你想最快跑起來，照這個順序就夠了：
+
+1. 安裝 repo 到你的 AI 工具環境
+2. 跑 `/setup` 匯入歷史貼文
+3. 跑 `scripts/update_topic_freshness.py` 建立語意群與題材新鮮度
+4. 寫完一篇文後跑 `/analyze`
+5. 發文前想看區間就跑 `/predict`
+6. 發文後用 `/review` 回收 24h / 72h checkpoint
+7. 如果你有 Threads API token，再加上 `scripts/update_snapshots.py` 做自動快照
+
+最小工作流：
+
+```text
+/setup -> update_topic_freshness.py -> /analyze -> /predict -> 發文 -> /review
+```
+
+進階工作流（有 API）：
+
+```text
+/setup -> update_topic_freshness.py -> /analyze -> /predict -> 發文 -> update_snapshots.py -> /review
+```
 
 ---
 
@@ -72,6 +132,8 @@ AK-Threads-booster 支援多種 AI 編碼工具。Claude Code 提供完整的 7 
 # 在你的 Claude Code 專案目錄下
 claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
 ```
+
+安裝後，專案會以單一頂層 Skill `ak-threads-booster` 顯示；它會再依照使用者意圖，自動路由到 `setup`、`analyze`、`draft`、`predict`、`review`、`topics`、`voice` 等內部模組。
 
 ### 方式二：手動安裝
 
@@ -85,11 +147,13 @@ claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
    cp -r AK-Threads-booster /path/to/your/project/.claude/plugins/
    ```
 
-3. 重啟 Claude Code，Skill 會自動被偵測到。
+3. 重啟 Claude Code，Skill 會自動被偵測到，頂層名稱會顯示為 `ak-threads-booster`。
 
 ### 其他工具
 
 如果你使用 Cursor、Windsurf、Codex 或 GitHub Copilot，把整個 repo clone 到你的專案目錄下即可。各工具會自動讀取對應的設定檔。
+
+若是支援 Skill 安裝的工具，單一入口會使用根目錄的 [SKILL.md](./SKILL.md)，顯示名稱為 `ak-threads-booster`。
 
 ---
 
@@ -115,7 +179,64 @@ claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
 
 3. **報告分析結果**，讓你了解自己帳號的風格特徵和數據概況
 
-初始化只需執行一次。之後的數據更新透過 `/review` 模組持續累積。
+初始化只需執行一次。之後的數據更新透過 `/review` 模組持續累積；如果你有 API 權限，可以再用 `scripts/update_snapshots.py` 持續補 snapshot。若你要讓系統回看歷史貼文的語意相似度與題材疲勞，也可以跑 `scripts/update_topic_freshness.py`。
+
+---
+
+## 資料更新模式
+
+AK體現在有兩條實際可行的資料更新路徑：
+
+### 路徑 A：Checkpoint 模式（所有人都能用）
+
+如果你只有匯出資料、沒有 API：
+
+- `/setup` 建立初始 tracker
+- 發文後用 `/review` 回收 24h / 72h / 7d 的 checkpoint 數據
+- 系統用 checkpoint 做預估校正
+
+這條路沒有成長曲線，但可用、穩定、維護成本低。
+
+### 路徑 B：Snapshot 模式（需要 Threads API）
+
+如果你有 Threads API token：
+
+- `scripts/fetch_threads.py` 初次匯入貼文與基礎 metrics
+- `scripts/update_snapshots.py` 定期刷新 metrics
+- tracker 會持續累積 `snapshots[]`
+- 腳本會自動把最接近 24h / 72h / 7d 的 snapshot 寫進 `performance_windows`
+
+最常用的 snapshot 更新指令：
+
+```bash
+python scripts/update_snapshots.py --token YOUR_TOKEN --tracker ./threads_daily_tracker.json --recent 10
+```
+
+指定單篇：
+
+```bash
+python scripts/update_snapshots.py --token YOUR_TOKEN --tracker ./threads_daily_tracker.json --post-id POST_ID
+```
+
+這代表 AK體現在不是只有「結果表」，而是已經開始能保留單篇貼文的成長節點。
+
+---
+
+### 題材新鮮度更新（所有人都能用）
+
+如果你想讓系統從歷史貼文角度判斷「這個題材最近是不是已經講太多次」，可以跑：
+
+```bash
+python scripts/update_topic_freshness.py --tracker ./threads_daily_tracker.json
+```
+
+它會做三件事：
+
+- 半自動語意分群
+- 回寫每篇貼文的 `semantic_cluster`
+- 計算 `freshness_score / fatigue_risk`
+
+這條流程不需要 Threads API，只有 tracker 就能跑。
 
 ---
 
@@ -149,7 +270,7 @@ Brand Voice 越完整，`/draft` 寫出來的初稿越像你。建議在 `/setup
 
 ### 3. /analyze -- 寫文分析（核心功能）
 
-寫完貼文後，貼上內容做四維度分析：
+寫完貼文後，貼上內容做 decision-first 分析：
 
 ```
 /analyze
@@ -157,12 +278,15 @@ Brand Voice 越完整，`/draft` 寫出來的初稿越像你。建議在 `/setup
 [貼上你的貼文內容]
 ```
 
-四個分析維度：
+現在的輸出順序是：
 
-- **風格比對**：跟你自己的歷史風格做比對，標記偏離項和歷史表現
-- **心理學分析**：Hook 機制、情緒弧線、分享動機、信任元素、認知偏誤、留言觸發潛力
-- **演算法對齊**：紅線掃描（命中直接警告）+ 加分信號評估
-- **AI 味檢測**：語句層、結構層、內容層的 AI 痕跡掃描
+- **Algorithm Red Lines**：先抓會被降權的問題
+- **Decision Summary**：先看這篇最大的上升點和最大阻力
+- **Highest-Upside Comparisons**：它最像你歷史上哪一類高表現文
+- **Suppression Risks**：哪些點會壓住它，就算它本質不差
+- **Style / Psychology / Algorithm / AI-Tone**：再往下看完整分析
+
+如果你只有 `tracker`、還沒有完整 `style_guide.md`，`/analyze` 也會退化成 tracker-only 模式，不會直接失效。
 
 觸發詞：`分析`、`analyze`、`檢查`、`AK體`
 
@@ -180,7 +304,7 @@ Brand Voice 越完整，`/draft` 寫出來的初稿越像你。建議在 `/setup
 
 ### 5. /draft -- 寫文輔助
 
-從題材庫選題，基於用戶的 Brand Voice 產出貼文初稿。這是 AK體作為 AI 寫文輔助工具最直接的功能，但初稿只是起點。
+從題材庫選題，基於用戶的 Brand Voice 產出貼文初稿。起草前會先進行線上資料查證與素材研究，確保內容有據可依。這是 AK體作為 AI 寫文輔助工具最直接的功能，但初稿只是起點。
 
 ```
 /draft [題材]
@@ -218,6 +342,7 @@ Brand Voice 越完整，`/draft` 寫出來的初稿越像你。建議在 `/setup
 - 回收實際表現數據
 - 跟預估比對，分析偏差原因
 - 更新 tracker 和風格指南
+- 在有 API 的情況下，消化 `snapshots[]` / `performance_windows`
 - 建議最佳發文時間
 
 觸發詞：`回顧`、`review`、`覆盤`、`數據`
@@ -259,11 +384,13 @@ AK體內建三份知識庫，作為分析的參考基準：
 6. （用戶根據分析自行調整）
 7. /predict [貼文]     -- 發文前預估表現
 8. （發文）
-9. /review             -- 發文 24h 後回收數據
-10. 回到步驟 3
+9. update_snapshots.py      -- 有 API 時補 snapshot / checkpoint
+10. update_topic_freshness.py -- 更新語意群 / 題材新鮮度
+11. /review                -- 發文 24h 後回收數據
+12. 回到步驟 3
 ```
 
-每跑一輪，系統的分析和預估就會更準一點。`/voice` 只需要跑一次（或在累積更多貼文後重跑更新），`/draft` 會自動引用 Brand Voice 檔案。
+沒有 API 的用戶可以跳過 `update_snapshots.py`，但仍可使用 `update_topic_freshness.py`。每跑一輪，系統的分析和預估就會更準一點。`/voice` 只需要跑一次（或在累積更多貼文後重跑更新），`/draft` 會自動引用 Brand Voice 檔案。
 
 ---
 
@@ -316,6 +443,9 @@ AK-Threads-booster/
 ├── .github/
 │   └── copilot-instructions.md
 ├── AGENTS.md
+├── SKILL.md
+├── assets/
+│   └── readme-banner.svg
 ├── skills/
 │   ├── setup/SKILL.md
 │   ├── voice/SKILL.md
@@ -331,11 +461,17 @@ AK-Threads-booster/
 ├── scripts/
 │   ├── fetch_threads.py
 │   ├── parse_export.py
+│   ├── update_snapshots.py
+│   ├── update_topic_freshness.py
 │   └── requirements.txt
 ├── templates/
 │   ├── tracker-template.json
 │   ├── style-guide-template.md
 │   └── concept-library-template.md
+├── examples/
+│   ├── tracker-example.json
+│   ├── style-guide-example.md
+│   └── brand-voice-example.md
 ├── README.md
 ├── README.en.md
 ├── README.ja.md

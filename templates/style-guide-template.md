@@ -1,90 +1,145 @@
-# 個人化風格指南
+# Personalized Style Guide
 
-> 此檔案由 AK體 setup 模組自動生成，基於你的歷史貼文數據分析。
-> 最後更新：（待生成）
-
----
-
-## 口頭禪與高頻用語
-
-（待分析歷史貼文後自動填入）
+> Generated from the user's historical Threads posts.
+> Last updated: `YYYY-MM-DD`
 
 ---
 
-## Hook 類型效果排名
+## Data Coverage
 
-| Hook 類型 | 使用次數 | 平均 Views | 平均 Likes | 平均 Replies |
-|-----------|----------|-----------|-----------|-------------|
-
-（待分析歷史貼文後自動填入）
-
----
-
-## 人稱使用密度
-
-| 人稱 | 使用頻率 | 備註 |
-|------|----------|------|
-
-（待分析歷史貼文後自動填入）
+- Historical posts analyzed:
+- Posts with reliable view data:
+- Posts with reliable reply data:
+- Time range covered:
+- Confidence level:
 
 ---
 
-## 結尾模式效果排名
+## Style Snapshot
 
-| 結尾類型 | 使用次數 | 平均 Views | 平均 Replies |
-|----------|----------|-----------|-------------|
-
-（待分析歷史貼文後自動填入）
-
----
-
-## 用語風格
-
-（待分析：口語 / 書面語 / 混合比例）
+- Dominant content types:
+- Dominant hook types:
+- Typical word-count range:
+- Typical paragraph count:
+- Typical ending patterns:
+- Typical emotional arcs:
+- Typical register:
 
 ---
 
-## 段落結構
+## Top-Quartile Patterns
 
-- 平均段數：
-- 每段平均句數：
-- 平均總字數：
-- 最佳表現字數區間：
+Document what repeatedly appears in the user's top 25% posts.
 
-（待分析歷史貼文後自動填入）
+| Pattern | Evidence Count | Performance Signal | Notes |
+|---------|----------------|--------------------|-------|
 
 ---
 
-## 字數範圍與表現
+## Hook Types
 
-| 字數區間 | 貼文數 | 平均 Views | 平均互動率 |
-|----------|--------|-----------|-----------|
-
-（待分析歷史貼文後自動填入）
+| Hook Type | Usage Count | Avg Views | Avg Replies | Top-Quartile Hit Rate | Notes |
+|-----------|-------------|-----------|-------------|-----------------------|-------|
 
 ---
 
-## 內容類型配比
+## Hook Promise Fulfillment
 
-| 內容類型 | 貼文數 | 佔比 | 平均 Views | 平均 Likes |
-|----------|--------|------|-----------|-----------|
+Describe how the user's stronger posts usually pay off the opening promise.
 
-（待分析歷史貼文後自動填入）
-
----
-
-## 情緒弧線偏好
-
-| 弧線類型 | 使用次數 | 平均表現 |
-|----------|----------|----------|
-
-（待分析歷史貼文後自動填入）
+| Pattern | Evidence Count | Performance Signal | Notes |
+|---------|----------------|--------------------|-------|
 
 ---
 
-## 備註
+## Ending Patterns
 
-- 這份指南描述的是「你目前的風格」，不是「你應該的風格」
-- 數據表現好的風格會被標注，但不強制遵循
-- 風格偏離時提供數據參考，不做價值判斷
-- 隨新貼文數據持續更新
+| Ending Type | Usage Count | Avg Views | Avg Replies | Share Signal | Notes |
+|-------------|-------------|-----------|-------------|--------------|-------|
+
+---
+
+## Word Count And Structure
+
+- Best-performing word-count band:
+- Typical paragraph-count band:
+- Notes on short-form vs long-form performance:
+
+| Structure Pattern | Usage Count | Performance Signal | Notes |
+|-------------------|-------------|--------------------|-------|
+
+---
+
+## Pronoun And Register Use
+
+| Feature | Baseline | Notes |
+|---------|----------|-------|
+| I / me density |  |  |
+| You density |  |  |
+| We density |  |  |
+| Register mix |  |  |
+
+---
+
+## Content Types
+
+| Content Type | Usage Count | Avg Views | Avg Replies | Avg Shares | Notes |
+|--------------|-------------|-----------|-------------|------------|-------|
+
+---
+
+## Emotional Arcs
+
+| Emotional Arc | Usage Count | Avg Views | Avg Replies | Notes |
+|---------------|-------------|-----------|-------------|-------|
+
+---
+
+## Share And DM Drivers
+
+Capture what tends to correlate with forwarding behavior.
+
+| Driver | Evidence Count | Performance Signal | Notes |
+|--------|----------------|--------------------|-------|
+
+---
+
+## Topic Clusters And Repetition Pressure
+
+List the user's most common topic clusters and any recent overuse signals.
+
+| Topic Cluster | Usage Count | Recent Frequency | Performance Signal | Notes |
+|---------------|-------------|------------------|--------------------|-------|
+
+---
+
+## Topic Freshness Budget
+
+Track semantic-cluster fatigue, not just exact-topic repeats.
+
+| Semantic Cluster | Similar Recent Posts | Days Since Last Similar Post | Freshness Signal | Fatigue Risk | Notes |
+|------------------|----------------------|------------------------------|------------------|--------------|-------|
+
+---
+
+## Timing Notes
+
+- Best posting windows:
+- Day-of-week effects:
+- Reliability of timing data:
+
+---
+
+## Signature Phrases
+
+- Phrase:
+- Phrase:
+- Phrase:
+
+---
+
+## Confidence Notes
+
+- Which conclusions are statistically strong:
+- Which conclusions are still thin-sample:
+- Missing data caveats:

@@ -1,12 +1,50 @@
 [繁體中文](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Português](README.pt.md) | [हिन्दी](README.hi.md) | [Bahasa Indonesia](README.id.md) | [ภาษาไทย](README.th.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Tiếng Việt](README.vi.md)
 
+<div align="center">
+
+<img src="./assets/readme-banner.svg" alt="AK Threads Booster banner" width="100%">
+
+<p>
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/license-MIT-6ee7b7?style=for-the-badge&logo=open-source-initiative&logoColor=0b0f19"></a>
+  <img alt="Status Alpha" src="https://img.shields.io/badge/status-alpha-f59e0b?style=for-the-badge&logo=target&logoColor=0b0f19">
+  <img alt="Seven Skills" src="https://img.shields.io/badge/modules-7%20skills-60a5fa?style=for-the-badge&logo=buffer&logoColor=0b0f19">
+  <img alt="Snapshot Ready" src="https://img.shields.io/badge/tracker-snapshot--ready-a78bfa?style=for-the-badge&logo=databricks&logoColor=0b0f19">
+  <a href="https://www.threads.com/@darkseoking"><img alt="Follow on Threads" src="https://img.shields.io/badge/Threads-@darkseoking-111827?style=for-the-badge&logo=threads&logoColor=white"></a>
+</p>
+
+</div>
+
+
 # AK-Threads-Booster
+
+> **Current Version**
+> - decision-first `/analyze` flow
+> - tracker-only fallback when full setup files are missing
+> - checkpoint review for all users
+> - API-backed `snapshots[]` and `performance_windows` via `scripts/update_snapshots.py`
 
 Threads creators ke liye ek open-source Claude Code skill aur AI writing assistant. Ye tool aapke historical post data ko analyze karta hai, social media psychology research aur Threads algorithm ki insights use karke personalized writing analysis, Brand Voice profiling, aur draft assistance deta hai.
 
 Agar aap ek aisi AI content creation tool dhundh rahe ho jo actually aapke apne data se seekhe, ya phir Threads followers kaise badhaye iska data-backed jawab chahte ho, to ye project aapke liye hai. Ye koi template nahi hai. Koi rule set nahi hai. Ye ek consultant skill hai jo aapko Threads algorithm samajhne mein help karta hai aur aapke data ko actionable Threads tips mein convert karta hai. Works as a skill / plugin for Claude Code, Cursor, Codex, Windsurf, GitHub Copilot, aur Google Antigravity.
 
 **Completely free aur open-source** -- koi subscription nahi, koi hidden charges nahi. Saara data aapki local machine pe rehta hai.
+
+
+## त्वरित शुरुआत
+
+1. Repo ko apne AI tool me jodien.
+2. `/setup` chala kar historical posts import karein.
+3. Post likhne ke baad `/analyze` use karein; publish se pehle zarurat ho to `/predict`.
+4. Post ke baad `/review` se 24h aur 72h checkpoints collect karein.
+5. Agar Threads API token ho, to `scripts/update_snapshots.py` se snapshots update karein.
+
+## Data Update Mode
+
+- **Checkpoint mode**: sabhi users ke liye. `/review` 24h, 72h aur 7d values collect karke prediction base update karta hai.
+- **Snapshot mode**: Threads API ke saath. `scripts/update_snapshots.py` lagatar `snapshots[]` likhta hai aur nearest `performance_windows` update karta hai.
+
+
+
 
 ---
 
@@ -32,6 +70,12 @@ India mein creator economy bohot tezi se grow kar rahi hai, aur Threads pe ek ma
 
 AK-Threads-Booster in sab problems ko address karta hai aapke apne data ke through. Ye dekhta hai ki aapki audience actually kis type ke content pe respond karti hai, aur accordingly suggestions deta hai.
 
+
+
+
+
+
+
 ---
 
 ## Core Principles
@@ -41,6 +85,12 @@ AK-Threads-Booster in sab problems ko address karta hai aapke apne data ke throu
 **Data-driven hai, rule-driven nahi.** Saari suggestions aapke apne historical data se aati hain, kisi generic "Social Media Marketing ke 10 Tips" list se nahi. Jab data insufficient hota hai, system honestly bata deta hai instead of pretending confidence.
 
 **Red lines hi sirf hard rules hain.** Sirf wahi behaviors jinhe Meta ka algorithm explicitly penalize karta hai (engagement bait, clickbait, high-similarity reposts, etc.) direct warnings trigger karte hain. Baaki sab advisory hai. Final decision hamesha aapka hai.
+
+
+
+
+
+
 
 ---
 
@@ -69,6 +119,12 @@ Saare tool versions mein included hai:
 - Consultant tone guidelines (no scoring, no corrections, no ghostwriting)
 - Algorithm red-line rules (match hone pe warning)
 - Knowledge base references (psychology, algorithm, AI-tone detection)
+
+
+
+
+
+
 
 ---
 
@@ -99,6 +155,12 @@ claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
 
 Agar aap Cursor, Windsurf, Codex, ya GitHub Copilot use karte ho, to bas repo ko apne project directory mein clone kar lo. Har tool automatically apni corresponding configuration file read kar lega.
 
+
+
+
+
+
+
 ---
 
 ## Initialization
@@ -124,6 +186,12 @@ Initialization aapko guide karega:
 3. **Analysis report** jo aapke account ki style characteristics aur data overview dikhata hai
 
 Initialization sirf ek baar run karna hota hai. Baad ke data updates `/review` module ke through accumulate hote hain.
+
+
+
+
+
+
 
 ---
 
@@ -218,6 +286,12 @@ Ye kya karta hai:
 - Tracker aur style guide update karta hai
 - Optimal posting times suggest karta hai
 
+
+
+
+
+
+
 ---
 
 ## Knowledge Base
@@ -242,6 +316,12 @@ Covers sentence-level AI traces (10 types), structure-level AI traces (5 types),
 
 Purpose: `/analyze` mein AI-tone scanning ke liye detection baseline. AI traces flag karta hai aapke fix karne ke liye; auto-correct nahi karta.
 
+
+
+
+
+
+
 ---
 
 ## Typical Workflow
@@ -260,6 +340,12 @@ Purpose: `/analyze` mein AI-tone scanning ke liye detection baseline. AI traces 
 ```
 
 Har cycle ke saath system ki analysis aur predictions zyada accurate hoti jaati hain. `/voice` sirf ek baar run karna hota hai (ya zyada posts accumulate hone ke baad re-run karein). `/draft` automatically aapki Brand Voice file reference karta hai.
+
+
+
+
+
+
 
 ---
 
@@ -292,6 +378,12 @@ Generic tools general models se content produce karte hain. AK-Threads-Booster k
 **Q: Kya ye guarantee karta hai ki mere posts viral honge?**
 Nahi. Threads ka algorithm ek bohot complex system hai, aur koi bhi tool viral posts guarantee nahi kar sakta. AK-Threads-Booster jo karta hai wo ye hai ki aapko apne historical data ke basis pe better decisions lene mein help karta hai, known algorithm red lines se bachata hai, aur psychology aur data-driven analysis ke through har post ki performance probability improve karta hai. Ye currently sabse comprehensive Threads content creation skill hai, lekin jo factors determine karte hain ki koi post viral hoga ya nahi -- timing, topic relevance, audience state, us moment pe algorithm ki distribution logic -- ye sab kisi bhi tool ke control mein nahi hain. Isse apna data consultant samjho, viral guarantee machine nahi.
 
+
+
+
+
+
+
 ---
 
 ## Directory Structure
@@ -315,6 +407,8 @@ AK-Threads-booster/
 ├── .github/
 │   └── copilot-instructions.md
 ├── AGENTS.md
+├── assets/
+│   └── readme-banner.svg
 ├── skills/
 │   ├── setup/SKILL.md
 │   ├── voice/SKILL.md
@@ -327,10 +421,19 @@ AK-Threads-booster/
 │   ├── psychology.md
 │   ├── algorithm.md
 │   └── ai-detection.md
+├── scripts/
+│   ├── fetch_threads.py
+│   ├── parse_export.py
+│   ├── update_snapshots.py
+│   └── requirements.txt
 ├── templates/
 │   ├── tracker-template.json
 │   ├── style-guide-template.md
 │   └── concept-library-template.md
+├── examples/
+│   ├── tracker-example.json
+│   ├── style-guide-example.md
+│   └── brand-voice-example.md
 ├── README.md
 ├── README.en.md
 ├── README.ja.md
@@ -338,8 +441,16 @@ AK-Threads-booster/
 └── LICENSE
 ```
 
+
+
+
+
+
+
 ---
 
 ## License
 
 MIT License. See [LICENSE](./LICENSE).
+
+

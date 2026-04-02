@@ -1,10 +1,45 @@
 [繁體中文](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Português](README.pt.md) | [हिन्दी](README.hi.md) | [Bahasa Indonesia](README.id.md) | [ภาษาไทย](README.th.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Tiếng Việt](README.vi.md)
 
+<div align="center">
+
+<img src="./assets/readme-banner.svg" alt="AK Threads Booster banner" width="100%">
+
+<p>
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/license-MIT-6ee7b7?style=for-the-badge&logo=open-source-initiative&logoColor=0b0f19"></a>
+  <img alt="Status Alpha" src="https://img.shields.io/badge/status-alpha-f59e0b?style=for-the-badge&logo=target&logoColor=0b0f19">
+  <img alt="Seven Skills" src="https://img.shields.io/badge/modules-7%20skills-60a5fa?style=for-the-badge&logo=buffer&logoColor=0b0f19">
+  <img alt="Snapshot Ready" src="https://img.shields.io/badge/tracker-snapshot--ready-a78bfa?style=for-the-badge&logo=databricks&logoColor=0b0f19">
+  <a href="https://www.threads.com/@darkseoking"><img alt="Follow on Threads" src="https://img.shields.io/badge/Threads-@darkseoking-111827?style=for-the-badge&logo=threads&logoColor=white"></a>
+</p>
+
+</div>
+
+
 # AK-Threads-Booster
+
+> **Current Version**
+> - decision-first `/analyze` flow
+> - tracker-only fallback when full setup files are missing
+> - checkpoint review for all users
+> - API-backed `snapshots[]` and `performance_windows` via `scripts/update_snapshots.py`
 
 Un skill open-source pour Claude Code et assistant d'ecriture IA concu specifiquement pour les createurs de contenu sur Threads. AK-Threads-Booster analyse vos donnees historiques de publications, applique des recherches en psychologie des reseaux sociaux et des connaissances sur l'algorithme de Threads pour fournir une analyse d'ecriture personnalisee, un profilage de Brand Voice et une assistance a la redaction de brouillons.
 
 Si vous cherchez un outil IA pour reseaux sociaux qui apprend reellement de vos propres donnees, une strategie de contenu fondee sur des metriques concretes, ou un moyen d'ameliorer votre creation de contenu sans sacrifier la qualite de votre ecriture, ce projet est fait pour ca. Pas un template. Pas un ensemble de regles. Un systeme de conseil qui vous aide a comprendre l'algorithme de Threads et a transformer vos donnees en engagement reel. Fonctionne comme skill / plugin pour Claude Code, Cursor, Codex, Windsurf, GitHub Copilot et Google Antigravity.
+
+
+## Démarrage rapide
+
+1. Ajoutez le repo a votre outil IA.
+2. Lancez `/setup` pour importer vos publications historiques.
+3. Redigez un post puis passez par `/analyze`; avant publication, utilisez `/predict` si besoin.
+4. Apres publication, utilisez `/review` pour les checkpoints 24h et 72h.
+5. Avec un token API Threads, exécutez `scripts/update_snapshots.py` pour les snapshots.
+
+## Mise a jour des donnees
+
+- **Mode checkpoint** : disponible pour tout le monde. `/review` collecte les valeurs 24h, 72h et 7j pour mettre a jour la base de reference.
+- **Mode snapshot** : avec l’API Threads. `scripts/update_snapshots.py` ajoute des `snapshots[]` et met a jour les `performance_windows` les plus proches.
 
 ---
 
@@ -32,6 +67,9 @@ C'est precisement la que les createurs francophones rencontrent un dilemme :
 
 AK-Threads-Booster aborde ces questions differemment. Au lieu de generer du contenu a votre place, il analyse votre propre ecriture pour identifier ce qui fonctionne avec votre audience specifique. La detection de ton IA vous aide a reperer exactement ou votre texte perd en naturalite. Le Brand Voice profiling capture les nuances de votre style pour que les brouillons servent de point de depart credible, pas de produit fini generique.
 
+
+
+
 ---
 
 ## Principes fondamentaux
@@ -41,6 +79,9 @@ AK-Threads-Booster aborde ces questions differemment. Au lieu de generer du cont
 **Pilote par les donnees, pas par les regles.** Toutes les suggestions proviennent de vos propres donnees historiques, pas d'une liste generique de "10 Conseils Marketing pour les Reseaux Sociaux." Quand les donnees sont insuffisantes, le systeme vous le dit honnetement au lieu de feindre l'assurance.
 
 **Les red lines sont les seules regles strictes.** Seuls les comportements que l'algorithme de Meta penalise explicitement (engagement bait, clickbait, republications a haute similarite, etc.) declenchent des avertissements directs. Tout le reste est consultatif. Vous gardez toujours le dernier mot.
+
+
+
 
 ---
 
@@ -69,6 +110,9 @@ Toutes les versions incluent :
 - Directives de ton consultatif (pas de notation, pas de correction, pas de ghostwriting)
 - Regles de red line algorithmiques (avertissement a la detection)
 - References de la base de connaissances (psychologie, algorithme, detection de ton IA)
+
+
+
 
 ---
 
@@ -99,6 +143,9 @@ claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
 
 Si vous utilisez Cursor, Windsurf, Codex ou GitHub Copilot, clonez simplement le depot dans le repertoire de votre projet. Chaque outil lira automatiquement son fichier de configuration correspondant.
 
+
+
+
 ---
 
 ## Initialisation
@@ -124,6 +171,9 @@ L'initialisation vous guide a travers :
 3. **Rapport d'analyse** montrant les caracteristiques stylistiques de votre compte et un panorama des donnees
 
 L'initialisation ne doit etre executee qu'une seule fois. Les mises a jour de donnees suivantes s'accumulent via le module `/review`.
+
+
+
 
 ---
 
@@ -220,6 +270,9 @@ Ce qu'il fait :
 - Met a jour le tracker et le guide de style
 - Suggere les horaires de publication optimaux
 
+
+
+
 ---
 
 ## Base de connaissances
@@ -244,6 +297,9 @@ Couvre les traces d'IA au niveau de la phrase (10 types), les traces d'IA au niv
 
 Objectif : Ligne de base de detection pour le scan de ton IA dans `/analyze`. Signale les traces d'IA pour que vous les corrigiez vous-meme ; ne corrige pas automatiquement.
 
+
+
+
 ---
 
 ## Flux de travail typique
@@ -262,6 +318,9 @@ Objectif : Ligne de base de detection pour le scan de ton IA dans `/analyze`. Si
 ```
 
 Chaque cycle rend les analyses et predictions du systeme plus precises. `/voice` n'a besoin d'etre execute qu'une fois (ou re-execute apres avoir accumule plus de publications). `/draft` reference automatiquement votre fichier Brand Voice.
+
+
+
 
 ---
 
@@ -291,6 +350,9 @@ Les outils generiques produisent du contenu a partir de modeles generaux. Les an
 **Q : Cela garantit-il que mes publications deviendront virales ?**
 Non. L'algorithme de Threads est un systeme extremement complexe, et aucun outil ne peut garantir des publications virales. Ce que fait AK-Threads-Booster, c'est vous aider a prendre de meilleures decisions basees sur vos propres donnees historiques, a eviter les red lines connues de l'algorithme, et a ameliorer la probabilite que chaque publication performe bien grace a une analyse psychologique et pilotee par les donnees. C'est le skill de creation de contenu pour Threads le plus complet disponible actuellement, mais les facteurs qui determinent si une publication devient virale -- le timing, la pertinence du sujet, l'etat de l'audience, la logique de distribution de l'algorithme a ce moment -- sont trop nombreux pour qu'un outil les controle entierement. Considerez-le comme votre consultant en donnees, pas comme une machine a garantir la viralite.
 
+
+
+
 ---
 
 ## Structure des repertoires
@@ -314,6 +376,8 @@ AK-Threads-booster/
 ├── .github/
 │   └── copilot-instructions.md
 ├── AGENTS.md
+├── assets/
+│   └── readme-banner.svg
 ├── skills/
 │   ├── setup/SKILL.md
 │   ├── voice/SKILL.md
@@ -326,10 +390,19 @@ AK-Threads-booster/
 │   ├── psychology.md
 │   ├── algorithm.md
 │   └── ai-detection.md
+├── scripts/
+│   ├── fetch_threads.py
+│   ├── parse_export.py
+│   ├── update_snapshots.py
+│   └── requirements.txt
 ├── templates/
 │   ├── tracker-template.json
 │   ├── style-guide-template.md
 │   └── concept-library-template.md
+├── examples/
+│   ├── tracker-example.json
+│   ├── style-guide-example.md
+│   └── brand-voice-example.md
 ├── README.md
 ├── README.en.md
 ├── README.ja.md
@@ -337,8 +410,13 @@ AK-Threads-booster/
 └── LICENSE
 ```
 
+
+
+
 ---
 
 ## Licence
 
 MIT License. Voir [LICENSE](./LICENSE).
+
+

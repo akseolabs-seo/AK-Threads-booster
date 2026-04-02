@@ -24,6 +24,7 @@ import json
 import sys
 import time
 from datetime import datetime, timezone
+from typing import Optional
 
 try:
     import requests
@@ -38,11 +39,18 @@ API_BASE = "https://graph.threads.net/v1.0"
 RATE_LIMIT_DELAY = 0.5  # seconds between API calls
 
 
-def get_user_id(token: str) -> str:
-    """Get the authenticated user's Threads user ID."""
-    resp = requests.get(f"{API_BASE}/me", params={"access_token": token})
+def get_user_profile(token: str) -> dict:
+    """Get the authenticated user's Threads profile."""
+    resp = requests.get(
+        f"{API_BASE}/me",
+        params={"fields": "id,username", "access_token": token},
+    )
     resp.raise_for_status()
-    return resp.json()["id"]
+    data = resp.json()
+    return {
+        "id": data["id"],
+        "username": data.get("username", ""),
+    }
 
 
 def fetch_all_threads(user_id: str, token: str) -> list:
@@ -166,7 +174,150 @@ def classify_content_type(text: str) -> str:
     return "opinion"
 
 
-def build_tracker(threads: list, token: str) -> dict:
+def count_words(text: str) -> int:
+    """Estimate word count from whitespace-separated tokens."""
+    return len(text.split()) if text else 0
+
+
+def count_paragraphs(text: str) -> int:
+    """Count non-empty paragraphs."""
+    if not text:
+        return 0
+    return len([chunk for chunk in text.splitlines() if chunk.strip()])
+
+
+def build_posting_time_slot(timestamp: str) -> Optional[str]:
+    """Convert an ISO timestamp into a coarse posting-time bucket."""
+    if not timestamp:
+        return None
+
+    try:
+        dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+    hour = dt.hour
+    if hour < 6:
+        window = "00:00-05:59"
+    elif hour < 12:
+        window = "06:00-11:59"
+    elif hour < 18:
+        window = "12:00-17:59"
+    else:
+        window = "18:00-23:59"
+
+    return f"{dt.strftime('%a')} {window}"
+
+
+def parse_iso_datetime(timestamp: str) -> Optional[datetime]:
+    """Parse an ISO timestamp into a datetime."""
+    if not timestamp:
+        return None
+
+    try:
+        return datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def build_metric_snapshot(metrics: dict, created_at: str, captured_at: Optional[str] = None) -> dict:
+    """Create a metrics snapshot entry for the tracker."""
+    captured = captured_at or datetime.now(timezone.utc).isoformat()
+    created_dt = parse_iso_datetime(created_at)
+    captured_dt = parse_iso_datetime(captured)
+    hours_since_publish = None
+
+    if created_dt and captured_dt:
+        delta = captured_dt - created_dt
+        hours_since_publish = round(delta.total_seconds() / 3600, 2)
+
+    return {
+        "captured_at": captured,
+        "hours_since_publish": hours_since_publish,
+        "views": metrics.get("views", 0),
+        "likes": metrics.get("likes", 0),
+        "replies": metrics.get("replies", 0),
+        "reposts": metrics.get("reposts", 0),
+        "quotes": metrics.get("quotes", 0),
+        "shares": metrics.get("shares", 0),
+    }
+
+
+def build_algorithm_signals() -> dict:
+    """Create an empty algorithm-signals scaffold for a post."""
+    return {
+        "discovery_surface": {
+            "threads": None,
+            "instagram": None,
+            "facebook": None,
+            "profile": None,
+            "topic_feed": None,
+            "other": None,
+        },
+        "topic_graph": {
+            "topic_tag_used": None,
+            "topic_tag_count": None,
+            "topic_match_clarity": None,
+            "single_topic_clarity": None,
+            "bio_topic_match": None,
+        },
+        "topic_freshness": {
+            "semantic_cluster": None,
+            "similar_recent_posts": None,
+            "recent_cluster_frequency": None,
+            "days_since_last_similar_post": None,
+            "freshness_score": None,
+            "fatigue_risk": None,
+        },
+        "originality_risk": {
+            "caption_content_mismatch": None,
+            "hashtag_stuffing_risk": None,
+            "duplicate_cluster_risk": None,
+            "minor_edit_repost_risk": None,
+            "low_value_reaction_risk": None,
+            "fake_engagement_pattern_risk": None,
+        },
+    }
+
+
+def build_psychology_signals() -> dict:
+    """Create an empty psychology-signals scaffold for a post."""
+    return {
+        "hook_payoff": {
+            "hook_strength": None,
+            "payoff_strength": None,
+            "hook_payoff_gap": None,
+        },
+        "share_motive_split": {
+            "dm_forwardability": None,
+            "public_repostability": None,
+            "identity_signal_strength": None,
+            "utility_share_strength": None,
+        },
+        "retellability": None,
+    }
+
+
+def build_review_state() -> dict:
+    """Create an empty review-state scaffold for a post."""
+    return {
+        "last_reviewed_at": None,
+        "actual_checkpoint_hours": None,
+        "deviation_summary": None,
+        "calibration_notes": [],
+        "validated_signals": {
+            "discovery_surface_notes": None,
+            "topic_graph_notes": None,
+            "topic_freshness_notes": None,
+            "originality_risk_notes": None,
+            "hook_payoff_gap_notes": None,
+            "share_motive_split_notes": None,
+            "retellability_notes": None,
+        },
+    }
+
+
+def build_tracker(threads: list, token: str, account_handle: str = "") -> dict:
     """Build the tracker JSON from fetched threads."""
     posts = []
     total = len(threads)
@@ -191,6 +342,17 @@ def build_tracker(threads: list, token: str) -> dict:
             "created_at": thread.get("timestamp", ""),
             "permalink": thread.get("permalink", ""),
             "media_type": thread.get("media_type", "TEXT"),
+            "is_reply_post": False,
+            "content_type": classify_content_type(text),
+            "topics": [],  # Will be populated during style guide generation
+            "hook_type": None,
+            "ending_type": None,
+            "emotional_arc": None,
+            "word_count": count_words(text),
+            "paragraph_count": count_paragraphs(text),
+            "posting_time_slot": build_posting_time_slot(thread.get("timestamp", "")),
+            "algorithm_signals": build_algorithm_signals(),
+            "psychology_signals": build_psychology_signals(),
             "metrics": {
                 "views": metrics.get("views", 0),
                 "likes": metrics.get("likes", 0),
@@ -199,9 +361,31 @@ def build_tracker(threads: list, token: str) -> dict:
                 "quotes": metrics.get("quotes", 0),
                 "shares": 0,  # Not available via API
             },
+            "performance_windows": {
+                "24h": None,
+                "72h": None,
+                "7d": None,
+            },
+            "snapshots": [
+                build_metric_snapshot(
+                    {
+                        "views": metrics.get("views", 0),
+                        "likes": metrics.get("likes", 0),
+                        "replies": metrics.get("replies", 0),
+                        "reposts": metrics.get("reposts", 0),
+                        "quotes": metrics.get("quotes", 0),
+                        "shares": 0,
+                    },
+                    thread.get("timestamp", ""),
+                )
+            ],
+            "prediction_snapshot": None,
+            "review_state": build_review_state(),
             "comments": replies,
-            "content_type": classify_content_type(text),
-            "topics": [],  # Will be populated during style guide generation
+            "source": {
+                "import_path": "api",
+                "data_completeness": "full",
+            },
         }
         posts.append(post)
 
@@ -209,6 +393,11 @@ def build_tracker(threads: list, token: str) -> dict:
     posts.sort(key=lambda p: p.get("created_at", ""), reverse=True)
 
     return {
+        "account": {
+            "handle": account_handle,
+            "source": "api",
+            "timezone": "UTC",
+        },
         "posts": posts,
         "last_updated": datetime.now(timezone.utc).isoformat(),
     }
@@ -257,10 +446,13 @@ def main():
     else:
         print("[1/4] Using provided token (skip long-lived exchange)")
 
-    # Get user ID
+    # Get user profile
     print("[2/4] Fetching user profile...")
-    user_id = get_user_id(token)
+    profile = get_user_profile(token)
+    user_id = profile["id"]
     print(f"  User ID: {user_id}")
+    if profile["username"]:
+        print(f"  Username: @{profile['username']}")
 
     # Fetch all threads
     print("[3/4] Fetching all historical posts...")
@@ -273,7 +465,8 @@ def main():
 
     # Build tracker with metrics and replies
     print("[4/4] Fetching metrics and replies for each post...")
-    tracker = build_tracker(threads, token)
+    handle = f"@{profile['username']}" if profile["username"] else ""
+    tracker = build_tracker(threads, token, account_handle=handle)
 
     # Write output
     with open(args.output, "w", encoding="utf-8") as f:

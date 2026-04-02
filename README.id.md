@@ -1,14 +1,49 @@
 [繁體中文](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Português](README.pt.md) | [हिन्दी](README.hi.md) | [Bahasa Indonesia](README.id.md) | [ภาษาไทย](README.th.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Tiếng Việt](README.vi.md)
 
+<div align="center">
+
+<img src="./assets/readme-banner.svg" alt="AK Threads Booster banner" width="100%">
+
+<p>
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/license-MIT-6ee7b7?style=for-the-badge&logo=open-source-initiative&logoColor=0b0f19"></a>
+  <img alt="Status Alpha" src="https://img.shields.io/badge/status-alpha-f59e0b?style=for-the-badge&logo=target&logoColor=0b0f19">
+  <img alt="Seven Skills" src="https://img.shields.io/badge/modules-7%20skills-60a5fa?style=for-the-badge&logo=buffer&logoColor=0b0f19">
+  <img alt="Snapshot Ready" src="https://img.shields.io/badge/tracker-snapshot--ready-a78bfa?style=for-the-badge&logo=databricks&logoColor=0b0f19">
+  <a href="https://www.threads.com/@darkseoking"><img alt="Follow on Threads" src="https://img.shields.io/badge/Threads-@darkseoking-111827?style=for-the-badge&logo=threads&logoColor=white"></a>
+</p>
+
+</div>
+
+
 # AK-Threads-Booster
 
-> **English Summary:** AK-Threads-booster is a Claude Code and Codex skill and AI writing assistant built specifically for Threads creators. This open-source Threads skill analyzes your historical post data, leverages social media psychology research and the Threads algorithm to provide personalized writing analysis, Brand Voice profiling, and draft assistance. Works as a skill / plugin for Claude Code, Cursor, Codex, Windsurf, GitHub Copilot, and Google Antigravity.
+> **English Summary:** AK-Threads-booster is a Claude Code and Codex skill system built specifically for Threads creators. It turns your own post history into a working decision layer for topic selection, draft support, post analysis, performance prediction, and post-publish feedback.
+>
+> **Current Version Highlights**
+> - decision-first `/analyze` flow
+> - tracker-only fallback when full setup files are missing
+> - checkpoint review for all users
+> - API-backed `snapshots[]` and `performance_windows` via `scripts/update_snapshots.py`
 
 AI Skill berbasis data yang dirancang khusus untuk kreator Threads. Mendukung Claude Code, Cursor, Codex, Windsurf, GitHub Copilot, Google Antigravity. Menganalisis data postingan historis kamu, memanfaatkan riset psikologi media sosial dan algoritma Threads untuk memberikan analisis tulisan yang dipersonalisasi, membangun Brand Voice, dan bantuan pembuatan draft.
 
 Indonesia adalah pasar Threads terbesar di Asia Tenggara. Komunitas di sini aktif, suka berinteraksi, dan gaya kontennya beragam. Tapi pertanyaan yang masih sering muncul di kalangan kreator: bagaimana cara menambah followers Threads secara organik, bagaimana algoritma Threads bekerja, konten seperti apa yang bisa menembus keramaian, dan bagaimana meningkatkan engagement rate.
 
 AK-Threads-Booster menjawab pertanyaan-pertanyaan itu dari data kamu sendiri. Bukan template generik dari internet. Bukan tips Threads yang sama untuk semua orang. Ini adalah sistem konsultan berbasis data yang menganalisis akun kamu, menemukan apa yang berhasil, dan menjelaskan alasannya dari sudut pandang psikologi dan algoritma. Kalau kamu sedang mencari AI konten kreator yang benar-benar belajar dari data kamu, alat ini dibuat untuk itu.
+
+
+## Mulai Cepat
+
+1. Tambahkan repo ini ke tool AI kamu.
+2. Jalankan `/setup` untuk mengimpor posting historis.
+3. Setelah menulis, pakai `/analyze`; sebelum posting, gunakan `/predict` bila perlu.
+4. Setelah posting, pakai `/review` untuk checkpoint 24 jam dan 72 jam.
+5. Jika punya token API Threads, jalankan `scripts/update_snapshots.py` untuk snapshot.
+
+## Mode Pembaruan Data
+
+- **Mode checkpoint**: untuk semua pengguna. `/review` mengumpulkan nilai 24 jam, 72 jam, dan 7 hari untuk memperbarui basis prediksi.
+- **Mode snapshot**: dengan API Threads. `scripts/update_snapshots.py` terus menulis `snapshots[]` dan memperbarui `performance_windows` terdekat.
 
 ---
 
@@ -24,6 +59,9 @@ Sistem Skill yang bisa langsung diinstal dan dipakai, dengan tiga fungsi inti:
 
 Setiap pengguna mendapatkan hasil yang berbeda karena audiens, gaya penulisan, dan data masing-masing berbeda. Inilah perbedaan mendasar antara template generik dan strategi Threads berbasis data.
 
+
+
+
 ---
 
 ## Prinsip Inti
@@ -33,6 +71,9 @@ Setiap pengguna mendapatkan hasil yang berbeda karena audiens, gaya penulisan, d
 **Berbasis data, bukan berbasis aturan.** Semua saran berasal dari data historis kamu sendiri, bukan dari daftar "10 Tips Marketing Media Sosial" yang generik. Kalau data belum cukup, sistem akan memberitahu dengan jujur.
 
 **Red line adalah satu-satunya aturan keras.** Hanya perilaku yang secara eksplisit dikenai penalti oleh algoritma Meta (engagement bait, clickbait, repost dengan kemiripan tinggi, dll.) yang akan mendapat peringatan langsung. Semua analisis lainnya bersifat rekomendasi. Kamu selalu punya keputusan akhir.
+
+
+
 
 ---
 
@@ -61,6 +102,9 @@ Semua versi tool mencakup:
 - Pedoman tone konsultan (tidak menilai, tidak mengoreksi, tidak ghostwriting)
 - Aturan red line algoritma (langsung peringatan saat terdeteksi)
 - Referensi knowledge base (psikologi, algoritma, deteksi tone AI)
+
+
+
 
 ---
 
@@ -91,6 +135,9 @@ claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
 
 Kalau kamu menggunakan Cursor, Windsurf, Codex, atau GitHub Copilot, cukup clone repo ke directory proyek kamu. Setiap tool akan otomatis membaca file konfigurasi yang sesuai.
 
+
+
+
 ---
 
 ## Inisialisasi
@@ -116,6 +163,9 @@ Inisialisasi akan memandu kamu melalui:
 3. **Laporan analisis** yang menunjukkan karakteristik gaya akun dan ringkasan data
 
 Inisialisasi cukup dijalankan sekali. Pembaruan data selanjutnya terakumulasi melalui modul `/review`.
+
+
+
 
 ---
 
@@ -208,6 +258,9 @@ Yang dilakukan:
 - Memperbarui tracker dan panduan gaya
 - Menyarankan waktu posting optimal
 
+
+
+
 ---
 
 ## Knowledge Base
@@ -232,6 +285,9 @@ Mencakup jejak AI level kalimat (10 jenis), jejak AI level struktur (5 jenis), j
 
 Kegunaan: Baseline deteksi untuk scan tone AI di `/analyze`. Menandai jejak AI agar kamu bisa memperbaiki sendiri; tidak mengoreksi otomatis.
 
+
+
+
 ---
 
 ## Alur Kerja Tipikal
@@ -250,6 +306,9 @@ Kegunaan: Baseline deteksi untuk scan tone AI di `/analyze`. Menandai jejak AI a
 ```
 
 Setiap siklus membuat analisis dan prediksi sistem semakin akurat. `/voice` cukup dijalankan sekali (atau jalankan ulang setelah postingan bertambah). `/draft` secara otomatis mereferensikan file Brand Voice.
+
+
+
 
 ---
 
@@ -279,6 +338,9 @@ AK-Threads-Booster bukan tool penambah followers otomatis. Yang dilakukan adalah
 **Q: Apakah ini bisa menjamin postingan viral?**
 Tidak. Algoritma Threads adalah sistem yang sangat kompleks, dan tidak ada tool yang bisa menjamin postingan viral. Yang dilakukan AK-Threads-Booster adalah membantu kamu membuat keputusan lebih baik berdasarkan data historis sendiri, menghindari red line algoritma yang sudah diketahui, dan meningkatkan probabilitas performa setiap postingan melalui analisis psikologi dan data. Ini adalah Threads content creation Skill paling komprehensif yang tersedia saat ini, tapi faktor yang menentukan apakah postingan bisa viral -- timing, relevansi topik, kondisi audiens, logika distribusi algoritma pada saat itu -- terlalu banyak untuk dikontrol oleh tool manapun. Gunakan sebagai konsultan data, bukan mesin jaminan viral.
 
+
+
+
 ---
 
 ## Struktur Direktori
@@ -302,6 +364,8 @@ AK-Threads-booster/
 ├── .github/
 │   └── copilot-instructions.md
 ├── AGENTS.md
+├── assets/
+│   └── readme-banner.svg
 ├── skills/
 │   ├── setup/SKILL.md
 │   ├── voice/SKILL.md
@@ -314,10 +378,19 @@ AK-Threads-booster/
 │   ├── psychology.md
 │   ├── algorithm.md
 │   └── ai-detection.md
+├── scripts/
+│   ├── fetch_threads.py
+│   ├── parse_export.py
+│   ├── update_snapshots.py
+│   └── requirements.txt
 ├── templates/
 │   ├── tracker-template.json
 │   ├── style-guide-template.md
 │   └── concept-library-template.md
+├── examples/
+│   ├── tracker-example.json
+│   ├── style-guide-example.md
+│   └── brand-voice-example.md
 ├── README.md
 ├── README.en.md
 ├── README.ja.md
@@ -325,8 +398,12 @@ AK-Threads-booster/
 └── LICENSE
 ```
 
+
+
+
 ---
 
 ## License
 
 MIT License. Lihat [LICENSE](./LICENSE).
+

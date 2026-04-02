@@ -1,38 +1,53 @@
-# 概念知識庫
+# Concept Library
 
-> 追蹤已向受眾解釋過的概念，避免重複解釋，支援概念串聯。
-> 此檔案由 AK體 setup 模組自動生成，隨新貼文持續更新。
-> 最後更新：（待生成）
-
----
-
-## 已解釋概念索引
-
-| 概念名稱 | 首次出現貼文 | 日期 | 解釋深度 | 使用的類比 |
-|----------|-------------|------|----------|-----------|
-
-（待分析歷史貼文後自動填入）
+> Tracks concepts the user has already explained to the audience.
+> Last updated: `YYYY-MM-DD`
 
 ---
 
-## 用過的類比
+## Coverage
 
-| 類比方式 | 對應概念 | 出現貼文 | 備註 |
-|----------|----------|----------|------|
-
-（待分析歷史貼文後自動填入）
-
----
-
-## 概念關聯圖
-
-（待累積足夠概念後自動建立）
+- Historical posts scanned:
+- Concepts indexed:
+- Analogies indexed:
 
 ---
 
-## 使用說明
+## Explained Concepts
 
-- 寫文前查詢此庫，確認該概念是否已向受眾解釋過
-- 已解釋過的概念可直接使用，不需重新科普
-- 淺度解釋過的概念，後續貼文可以加深
-- 用過的類比避免重複使用，換新的類比方式
+| Concept | First Post | First Date | Explanation Depth | Related Topics | Notes |
+|---------|------------|------------|-------------------|----------------|-------|
+
+---
+
+## Concepts That Were Only Lightly Explained
+
+Use this section to identify concepts that may support future follow-up posts.
+
+| Concept | Latest Mention | Depth | Why It Is Still Incomplete |
+|---------|----------------|-------|-----------------------------|
+
+---
+
+## Used Analogies
+
+| Analogy | Concept | First Post | Reuse Risk | Notes |
+|---------|---------|------------|-----------|-------|
+
+---
+
+## Concept Clusters
+
+List recurring concept combinations that often appear together.
+
+| Cluster | Concepts Included | Frequency | Notes |
+|---------|-------------------|-----------|-------|
+
+---
+
+## Repeat-Watch Notes
+
+- Concepts already deeply explained:
+- Analogies that are becoming repetitive:
+- Concepts that can be linked into future posts:
+- Semantic clusters that are nearing fatigue:

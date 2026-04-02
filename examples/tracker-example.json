@@ -1,0 +1,259 @@
+{
+  "posts": [
+    {
+      "id": "post_001",
+      "text": "最近幫客戶跑了一輪 Core Web Vitals 優化，LCP 從 4.2s 砍到 1.8s\n\n做了什麼？其實沒什麼花招\n\n1. 把首屏那張 hero image 從 PNG 換成 WebP，檔案大小直接少 70%\n2. 第三方 script 全部加 defer，不要擋 render\n3. 把 Google Fonts 改成 self-host，少一次 DNS lookup\n\n三件事，花不到兩小時\n\n但 Search Console 的數據變化要等兩到四週才看得出來，這段時間最難熬\n\n很多人做完技術優化就急著看排名，拜託不要。Google 重新 crawl 你的頁面需要時間，PageSpeed 分數提升不等於排名馬上動。\n\n先確認 CrUX 報告有反映你的改動，再來看排名變化比較實際。",
+      "created_at": "2026-03-03T09:15:00+08:00",
+      "metrics": {
+        "views": 12450,
+        "likes": 387,
+        "replies": 72,
+        "reposts": 18,
+        "shares": 35
+      },
+      "comments": [
+        {
+          "user": "@webdev_tony",
+          "text": "請問 self-host Google Fonts 會影響字型更新嗎？",
+          "created_at": "2026-03-03T10:22:00+08:00",
+          "likes": 8
+        },
+        {
+          "user": "@marketing_mei",
+          "text": "天啊我之前就是做完馬上看排名，難怪覺得沒效果想放棄",
+          "created_at": "2026-03-03T11:45:00+08:00",
+          "likes": 23
+        },
+        {
+          "user": "@seo_lisa",
+          "text": "@webdev_tony 不會喔，Google Fonts 更新頻率很低，self-host 半年重新抓一次就夠了。速度差異比較明顯。",
+          "created_at": "2026-03-03T12:01:00+08:00",
+          "likes": 12
+        }
+      ],
+      "content_type": "tutorial",
+      "topics": ["Core Web Vitals", "LCP", "技術SEO", "網站速度"]
+    },
+    {
+      "id": "post_002",
+      "text": "有人問我 AI 寫的文章到底能不能排名\n\n我的答案很簡單：能，但要看你怎麼用\n\n上個月我做了一個測試。同一個 keyword cluster，一半文章純 AI 生成只做基本校稿，另一半 AI 生成後我加入自己的案例、截圖、實測數據\n\n結果？\n\n純 AI 那批平均排在第 8-15 名，有加料的那批平均第 3-7 名\n\n差距不是因為 Google 能「偵測 AI」，是因為加了真實經驗的文章 E-E-A-T 訊號更強。用戶停留時間多了 40%，跳出率少了 15%\n\n所以重點不是「AI 還是人寫」，是「有沒有塞進真的東西」\n\n你隨便叫 ChatGPT 吐一篇 2000 字跟你花時間加入自己的數據截圖，Google 分得出來差異的。",
+      "created_at": "2026-03-06T14:30:00+08:00",
+      "metrics": {
+        "views": 15200,
+        "likes": 412,
+        "replies": 85,
+        "reposts": 22,
+        "shares": 41
+      },
+      "comments": [
+        {
+          "user": "@content_king_tw",
+          "text": "所以本質上還是 content quality 的問題對吧",
+          "created_at": "2026-03-06T15:12:00+08:00",
+          "likes": 31
+        },
+        {
+          "user": "@newbie_seo",
+          "text": "請問 E-E-A-T 要怎麼加強？有具體的做法嗎",
+          "created_at": "2026-03-06T16:00:00+08:00",
+          "likes": 14
+        },
+        {
+          "user": "@seo_lisa",
+          "text": "@content_king_tw 對，Google 不在乎你用什麼工具產內容，在乎的是內容本身有沒有料。工具是中性的。",
+          "created_at": "2026-03-06T16:20:00+08:00",
+          "likes": 27
+        }
+      ],
+      "content_type": "data-insight",
+      "topics": ["AI內容", "E-E-A-T", "內容策略", "排名因素"]
+    },
+    {
+      "id": "post_003",
+      "text": "做 SEO 最浪費時間的事：花三天找「完美的 keyword」\n\n我以前也這樣，開十個工具交叉比對，搜尋量、難度、CPC 全部列出來做表格\n\n後來發現一件事\n\n那些搜尋量 50 以下、所有工具都叫你不要碰的長尾字，反而轉換率最高\n\n因為搜這些字的人意圖超明確。他不是在亂逛，他是在找解決方案\n\n現在我做 keyword research 的方式很簡單：\n先用 Search Console 看我已經有曝光但排名 11-20 的字 → 這些是低垂的果實，稍微補強內容就能推上去\n\n再去看 People Also Ask 跟 Reddit 找真實用戶在問什麼 → 這些是工具抓不到的需求\n\n工具數據是參考，用戶的真實問題才是答案。",
+      "created_at": "2026-03-09T08:45:00+08:00",
+      "metrics": {
+        "views": 9800,
+        "likes": 256,
+        "replies": 48,
+        "reposts": 12,
+        "shares": 28
+      },
+      "comments": [
+        {
+          "user": "@freelance_ann",
+          "text": "Search Console 看 11-20 名這招太實用了！馬上去試",
+          "created_at": "2026-03-09T09:30:00+08:00",
+          "likes": 19
+        },
+        {
+          "user": "@seo_lisa",
+          "text": "@freelance_ann 對，而且這些字你已經有底子了，不用從零開始。通常補個段落或更新一下就能推上去。",
+          "created_at": "2026-03-09T10:15:00+08:00",
+          "likes": 11
+        }
+      ],
+      "content_type": "opinion",
+      "topics": ["keyword research", "長尾關鍵字", "Search Console", "工作流程"]
+    },
+    {
+      "id": "post_004",
+      "text": "上禮拜有個客戶來找我，說他網站流量掉了 60%\n\n我一看 Search Console，流量是從去年十一月開始掉的，剛好對上 Google November Core Update\n\n但他說「我什麼都沒改啊」\n\n我花了兩小時 audit 他的網站，發現：\n- 50% 的頁面是 thin content，每篇不到 300 字\n- 站內連結幾乎沒有，每篇文章都是孤島\n- 有 30 幾篇內容在互相搶同一組關鍵字（cannibalization）\n\n他確實什麼都沒改。問題是，他本來就該改。\n\n以前 Google 比較寬鬆的時候這些問題不會爆，但 core update 一收緊標準，體質差的站第一個被刷掉\n\n做 SEO 不能只看「我做了什麼」，要看「我該做但沒做什麼」。",
+      "created_at": "2026-03-12T11:20:00+08:00",
+      "metrics": {
+        "views": 14100,
+        "likes": 368,
+        "replies": 63,
+        "reposts": 15,
+        "shares": 32
+      },
+      "comments": [
+        {
+          "user": "@startup_jack",
+          "text": "cannibalization 這個問題我們也有，請問怎麼處理比較好？合併還是刪除？",
+          "created_at": "2026-03-12T12:05:00+08:00",
+          "likes": 16
+        },
+        {
+          "user": "@digital_nomad_tw",
+          "text": "「他確實什麼都沒改，問題是他本來就該改」這句話太狠了哈哈",
+          "created_at": "2026-03-12T13:30:00+08:00",
+          "likes": 42
+        },
+        {
+          "user": "@seo_lisa",
+          "text": "@startup_jack 看情況。如果兩篇角度不同就合併成一篇完整的，如果角度重複就留表現好的那篇，另一篇 301 redirect 過去。",
+          "created_at": "2026-03-12T14:00:00+08:00",
+          "likes": 20
+        }
+      ],
+      "content_type": "story",
+      "topics": ["Core Update", "流量下降", "content audit", "cannibalization"]
+    },
+    {
+      "id": "post_005",
+      "text": "你們覺得 2026 年 backlink 還重要嗎？\n\n我自己觀察到一個趨勢：\n純靠內容品質排上去的案例越來越多，尤其在 YMYL 以外的領域\n\n但完全不管 backlink 也不行，特別是新站。你沒有任何外部訊號，Google 根本不知道你是誰\n\n我現在的做法是：\n新站前六個月主動做 link building（digital PR、guest post、resource page），先把 domain authority 拉到一個基本門檻\n\n六個月後就不主動追了，把精力放在內容。好的內容自然會被引用\n\n你們的經驗呢？有沒有完全不做 backlink 也排得不錯的案例？",
+      "created_at": "2026-03-15T16:00:00+08:00",
+      "metrics": {
+        "views": 8200,
+        "likes": 198,
+        "replies": 76,
+        "reposts": 8,
+        "shares": 18
+      },
+      "comments": [
+        {
+          "user": "@link_builder_pro",
+          "text": "我們做 B2B SaaS 的，backlink 還是很重要。但同意不用一直追，到一個門檻就可以停了",
+          "created_at": "2026-03-15T17:10:00+08:00",
+          "likes": 12
+        },
+        {
+          "user": "@local_seo_guy",
+          "text": "做 local SEO 的話 citation 比 backlink 重要多了，Google Business Profile 搞好比較實際",
+          "created_at": "2026-03-15T18:45:00+08:00",
+          "likes": 9
+        }
+      ],
+      "content_type": "question",
+      "topics": ["backlinks", "link building", "domain authority", "排名因素"]
+    },
+    {
+      "id": "post_006",
+      "text": "昨天半夜在看 Google 的 Search Quality Rater Guidelines 最新版，發現一個很少人提到的細節\n\n他們在評估頁面品質的時候，會看「這個作者在其他平台的存在感」\n\n什麼意思？就是你光在自己網站寫文章不夠，Google 想看到你在 LinkedIn、Twitter、YouTube 這些地方也有持續產出，而且主題要一致\n\n這其實就是 E-E-A-T 的 Experience 跟 Authoritativeness 的延伸\n\n所以我現在建議客戶：不要只做網站 SEO，把你的「作者實體」建立起來。在不同平台用同一個名字、講同一個領域的東西、互相連結\n\n這不是社群行銷，這是 SEO 的一部分。\n\n2026 年的 SEO 不只是技術跟內容，是「你這個人」的可信度。",
+      "created_at": "2026-03-18T07:30:00+08:00",
+      "metrics": {
+        "views": 11300,
+        "likes": 315,
+        "replies": 52,
+        "reposts": 14,
+        "shares": 29
+      },
+      "comments": [
+        {
+          "user": "@personal_brand_tw",
+          "text": "所以經營個人品牌不只是行銷面的事，也影響 SEO？這個觀點很新",
+          "created_at": "2026-03-18T08:20:00+08:00",
+          "likes": 18
+        },
+        {
+          "user": "@skeptic_dev",
+          "text": "但 Google 真的會 cross-reference 不同平台嗎？有沒有實際證據",
+          "created_at": "2026-03-18T09:50:00+08:00",
+          "likes": 7
+        },
+        {
+          "user": "@seo_lisa",
+          "text": "@skeptic_dev Quality Rater Guidelines 裡面寫得很清楚，rater 被要求去搜作者名字看其他平台。雖然 rater 評分不直接影響排名，但這代表 Google 認為這是品質的指標，演算法多少會往這個方向走。",
+          "created_at": "2026-03-18T10:30:00+08:00",
+          "likes": 15
+        }
+      ],
+      "content_type": "data-insight",
+      "topics": ["E-E-A-T", "作者權威", "個人品牌", "Quality Rater Guidelines"]
+    },
+    {
+      "id": "post_007",
+      "text": "Technical SEO 小技巧分享\n\n你的網站有沒有一堆不需要被 index 的頁面在佔 crawl budget？\n\n常見的浪費：\n- /tag/ 頁面（WordPress 預設會生成一堆）\n- 分頁 /page/2/ /page/3/ ...\n- 搜尋結果頁 /?s=xxx\n- 作者頁面（只有一個作者的話根本不需要）\n\n這些頁面被 Google 爬到一次就是浪費一次 crawl budget\n\n解法：\n在 robots.txt 加 Disallow 太粗暴，用 noindex meta tag 比較好控制\n\n或者更好的做法：直接在 WordPress 裝 Yoast，把這些頁面的 index 關掉\n\n小站可能感覺不到差異，但頁面超過 500 頁的網站，清理完 crawl budget 之後新內容被收錄的速度會明顯變快。",
+      "created_at": "2026-03-22T10:00:00+08:00",
+      "metrics": {
+        "views": 7600,
+        "likes": 189,
+        "replies": 34,
+        "reposts": 9,
+        "shares": 22
+      },
+      "comments": [
+        {
+          "user": "@wp_developer_tw",
+          "text": "補充一下，如果用 Rank Math 的話也可以在 Titles & Meta 那邊批次設定",
+          "created_at": "2026-03-22T11:15:00+08:00",
+          "likes": 11
+        },
+        {
+          "user": "@seo_lisa",
+          "text": "@wp_developer_tw 對，Rank Math 也可以。重點是不管用什麼工具，記得去 Search Console 看 Coverage 報告確認那些頁面真的被排除了。",
+          "created_at": "2026-03-22T11:45:00+08:00",
+          "likes": 8
+        }
+      ],
+      "content_type": "tutorial",
+      "topics": ["technical SEO", "crawl budget", "noindex", "WordPress"]
+    },
+    {
+      "id": "post_008",
+      "text": "做了三年 SEO 顧問，我發現最大的敵人不是演算法更新\n\n是客戶的耐心\n\n上個月有個客戶，我們合作剛滿兩個月，他說「怎麼排名還沒上去，我朋友找了另一家一個月就排到第一頁」\n\n我跟他說，他朋友做的是一個月搜尋量 30 的長尾字，你要做的是月搜尋量 8000 的主力字，這兩個不能比\n\n但他聽不進去\n\n其實做 SEO 最難的不是技術，是管理期望值。你要讓客戶理解：\n\n1. SEO 的時間軸是用「月」算的，不是「天」\n2. 前三個月通常看不到排名變化，但基礎工程在跑\n3. 競爭對手也在動，排名是相對的不是絕對的\n\n能把這三件事講清楚的 SEO，案子做起來會順很多。講不清楚的就只能一直被追問「為什麼還沒排上去」。",
+      "created_at": "2026-03-27T15:45:00+08:00",
+      "metrics": {
+        "views": 13700,
+        "likes": 395,
+        "replies": 68,
+        "reposts": 19,
+        "shares": 37
+      },
+      "comments": [
+        {
+          "user": "@agency_life_tw",
+          "text": "太有共鳴了，我們每次都要花更多時間在 educate 客戶而不是做 SEO 本身",
+          "created_at": "2026-03-27T16:30:00+08:00",
+          "likes": 35
+        },
+        {
+          "user": "@client_side_pm",
+          "text": "身為客戶端的人，我覺得是因為很多 SEO 顧問自己也說不清楚時間表，所以客戶只好一直問",
+          "created_at": "2026-03-27T17:20:00+08:00",
+          "likes": 22
+        },
+        {
+          "user": "@seo_lisa",
+          "text": "@client_side_pm 同意。其實是雙方的問題，顧問如果一開始就把時間軸跟 milestone 列清楚，客戶也比較不會焦慮。溝通能力真的是這行的核心技能。",
+          "created_at": "2026-03-27T18:00:00+08:00",
+          "likes": 28
+        }
+      ],
+      "content_type": "story",
+      "topics": ["客戶管理", "SEO期望值", "顧問經驗", "溝通"]
+    }
+  ],
+  "last_updated": "2026-03-28T09:00:00+08:00"
+}

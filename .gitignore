@@ -1,0 +1,39 @@
+# ===========================================
+# AK-Threads-Booster .gitignore
+# Prevent users from accidentally committing
+# their personal data to the repository
+# ===========================================
+
+# User-generated data files (created by /setup)
+threads_daily_tracker.json
+style_guide.md
+brand_voice.md
+concept_library.md
+
+# User's topic bank and idea files
+idea/
+topics/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environment variables / secrets
+.env
+.env.*

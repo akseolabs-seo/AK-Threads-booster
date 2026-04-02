@@ -1,12 +1,47 @@
 [繁體中文](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Português](README.pt.md) | [हिन्दी](README.hi.md) | [Bahasa Indonesia](README.id.md) | [ภาษาไทย](README.th.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Tiếng Việt](README.vi.md)
 
+<div align="center">
+
+<img src="./assets/readme-banner.svg" alt="AK Threads Booster banner" width="100%">
+
+<p>
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/license-MIT-6ee7b7?style=for-the-badge&logo=open-source-initiative&logoColor=0b0f19"></a>
+  <img alt="Status Alpha" src="https://img.shields.io/badge/status-alpha-f59e0b?style=for-the-badge&logo=target&logoColor=0b0f19">
+  <img alt="Seven Skills" src="https://img.shields.io/badge/modules-7%20skills-60a5fa?style=for-the-badge&logo=buffer&logoColor=0b0f19">
+  <img alt="Snapshot Ready" src="https://img.shields.io/badge/tracker-snapshot--ready-a78bfa?style=for-the-badge&logo=databricks&logoColor=0b0f19">
+  <a href="https://www.threads.com/@darkseoking"><img alt="Follow on Threads" src="https://img.shields.io/badge/Threads-@darkseoking-111827?style=for-the-badge&logo=threads&logoColor=white"></a>
+</p>
+
+</div>
+
+
 # AK-Threads-Booster
+
+> **Current Version**
+> - decision-first `/analyze` flow
+> - tracker-only fallback when full setup files are missing
+> - checkpoint review for all users
+> - API-backed `snapshots[]` and `performance_windows` via `scripts/update_snapshots.py`
 
 Uma skill open-source de Claude Code e assistente de escrita com IA feita sob medida para criadores no Threads. O Threads no Brasil tem uma das comunidades mais engajadas do mundo, e esse projeto nasceu para resolver um problema real: como transformar toda essa energia de interacao em crescimento consistente de seguidores e alcance.
 
 O AK-Threads-Booster analisa seus dados historicos de postagens, aplica pesquisas de psicologia de redes sociais e mecanismos do algoritmo do Threads para entregar analise personalizada de escrita, perfil de Brand Voice e assistencia na criacao de rascunhos. Se voce esta procurando uma ferramenta AI para redes sociais que realmente aprende com os seus proprios dados, uma estrategia de conteudo baseada em metricas reais, ou dicas de Threads que vao alem do generico, esse e o projeto.
 
 Nao e template. Nao e lista de regras. E um consultor que te ajuda a entender o algoritmo do Threads e transformar seus dados em engajamento real no Threads. Funciona como skill / plugin para Claude Code, Cursor, Codex, Windsurf, GitHub Copilot e Google Antigravity.
+
+
+## Inicio Rápido
+
+1. Adicione o repo a sua ferramenta de IA.
+2. Rode `/setup` para importar os posts historicos.
+3. Depois de escrever, use `/analyze`; antes de publicar, use `/predict` se precisar.
+4. Depois de publicar, use `/review` para checkpoints de 24h e 72h.
+5. Se tiver um token da Threads API, rode `scripts/update_snapshots.py` para snapshots.
+
+## Atualizacao de Dados
+
+- **Modo checkpoint**: para todos os usuarios. `/review` coleta valores de 24h, 72h e 7d e atualiza a base de previsao.
+- **Modo snapshot**: com a Threads API. `scripts/update_snapshots.py` grava `snapshots[]` e atualiza os `performance_windows` mais proximos.
 
 ---
 
@@ -26,6 +61,9 @@ Cada usuario recebe resultados diferentes porque cada conta tem uma audiencia, u
 
 O Brasil e um dos tres maiores mercados do Threads no mundo. A comunidade brasileira no Threads e conhecida pela taxa de interacao altissima, pela cultura de memes e humor, e pela capacidade de transformar qualquer assunto em tendencia. O problema que muitos criadores brasileiros enfrentam nao e falta de interacao. E como converter essa interacao em crescimento real. Como manter sua voz propria enquanto surfa nas tendencias. O AK-Threads-Booster ataca exatamente esses pontos, usando seus proprios dados para encontrar o que funciona especificamente para a sua audiencia.
 
+
+
+
 ---
 
 ## Principios Fundamentais
@@ -35,6 +73,9 @@ O Brasil e um dos tres maiores mercados do Threads no mundo. A comunidade brasil
 **Baseado em dados, nao em regras.** Todas as sugestoes vem dos seus proprios dados historicos, nao de uma lista generica de "10 dicas de marketing digital." Quando os dados sao insuficientes, o sistema te avisa honestamente em vez de fingir certeza.
 
 **Red lines sao as unicas regras fixas.** So comportamentos que o algoritmo da Meta penaliza explicitamente (engagement bait, clickbait, repostagens com alta similaridade, etc.) geram avisos diretos. Todo o resto e consultivo. Voce sempre tem a palavra final.
+
+
+
 
 ---
 
@@ -63,6 +104,9 @@ Todas as versoes incluem:
 - Diretrizes de tom consultivo (sem nota, sem correcao, sem ghostwriting)
 - Regras de red line do algoritmo (aviso ao detectar)
 - Referencias da base de conhecimento (psicologia, algoritmo, deteccao de tom de IA)
+
+
+
 
 ---
 
@@ -93,6 +137,9 @@ claude install-plugin https://github.com/akseolabs-seo/AK-Threads-booster
 
 Se voce usa Cursor, Windsurf, Codex ou GitHub Copilot, basta clonar o repositorio no diretorio do seu projeto. Cada ferramenta vai ler automaticamente seu arquivo de configuracao correspondente.
 
+
+
+
 ---
 
 ## Inicializacao
@@ -118,6 +165,9 @@ A inicializacao te guia por:
 3. **Relatorio de analise** mostrando as caracteristicas de estilo da sua conta e panorama dos dados
 
 A inicializacao so precisa ser executada uma vez. Atualizacoes de dados subsequentes se acumulam atraves do modulo `/review`.
+
+
+
 
 ---
 
@@ -214,6 +264,9 @@ O que ele faz:
 - Atualiza tracker e guia de estilo
 - Sugere horarios ideais de postagem
 
+
+
+
 ---
 
 ## Base de Conhecimento
@@ -238,6 +291,9 @@ Cobre tracos de IA no nivel de frase (10 tipos), tracos de IA no nivel de estrut
 
 Proposito: Linha base de deteccao para o escaneamento de tom de IA no `/analyze`. Sinaliza tracos de IA para voce corrigir; nao corrige automaticamente.
 
+
+
+
 ---
 
 ## Fluxo de Trabalho Tipico
@@ -256,6 +312,9 @@ Proposito: Linha base de deteccao para o escaneamento de tom de IA no `/analyze`
 ```
 
 Cada ciclo torna a analise e as previsoes do sistema mais precisas. `/voice` so precisa ser executado uma vez (ou re-executado apos acumular mais postagens). `/draft` referencia automaticamente seu arquivo de Brand Voice.
+
+
+
 
 ---
 
@@ -285,6 +344,9 @@ Ferramentas genericas produzem conteudo a partir de modelos gerais. A analise e 
 **P: Isso garante que meus posts vao viralizar?**
 Nao. O algoritmo do Threads e um sistema extremamente complexo, e nenhuma ferramenta pode garantir posts virais. O que o AK-Threads-Booster faz e te ajudar a tomar decisoes melhores baseadas nos seus proprios dados historicos, evitar red lines conhecidas do algoritmo, e aumentar a probabilidade de cada post performar bem atraves de analise psicologica e orientada por dados. E a skill de criacao de conteudo para Threads mais completa disponivel hoje, mas os fatores que determinam se um post viraliza -- timing, relevancia do tema, estado da audiencia, a logica de distribuicao do algoritmo naquele momento -- sao numerosos demais para qualquer ferramenta controlar totalmente. Trate-o como seu consultor de dados, nao como uma maquina de garantir viralizacao.
 
+
+
+
 ---
 
 ## Estrutura de Diretorios
@@ -308,6 +370,8 @@ AK-Threads-booster/
 ├── .github/
 │   └── copilot-instructions.md
 ├── AGENTS.md
+├── assets/
+│   └── readme-banner.svg
 ├── skills/
 │   ├── setup/SKILL.md
 │   ├── voice/SKILL.md
@@ -320,10 +384,19 @@ AK-Threads-booster/
 │   ├── psychology.md
 │   ├── algorithm.md
 │   └── ai-detection.md
+├── scripts/
+│   ├── fetch_threads.py
+│   ├── parse_export.py
+│   ├── update_snapshots.py
+│   └── requirements.txt
 ├── templates/
 │   ├── tracker-template.json
 │   ├── style-guide-template.md
 │   └── concept-library-template.md
+├── examples/
+│   ├── tracker-example.json
+│   ├── style-guide-example.md
+│   └── brand-voice-example.md
 ├── README.md
 ├── README.en.md
 ├── README.ja.md
@@ -331,8 +404,13 @@ AK-Threads-booster/
 └── LICENSE
 ```
 
+
+
+
 ---
 
 ## Licenca
 
 MIT License. Veja [LICENSE](./LICENSE).
+
+
