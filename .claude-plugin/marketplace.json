@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ak-threads-booster-marketplace",
+  "description": "Single-plugin marketplace for AK體 Threads Booster",
+  "owner": {
+    "name": "AK SEO Labs",
+    "url": "https://threads.net/@darkseoking"
+  },
+  "plugins": [
+    {
+      "name": "ak-threads-booster",
+      "description": "AK體：數據驅動的社交媒體寫文顧問系統。基於歷史數據、社交媒體心理學、Meta演算法機制，為你的 Threads 帳號提供個人化的寫文分析與建議。",
+      "category": "productivity",
+      "source": "./",
+      "homepage": "https://github.com/akseolabs-seo/AK-Threads-booster"
+    }
+  ]
+}
