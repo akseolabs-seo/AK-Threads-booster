@@ -1,7 +1,7 @@
 {
   "name": "ak-threads-booster",
   "description": "AK體：數據驅動的社交媒體寫文顧問系統。基於歷史數據、社交媒體心理學、Meta演算法機制，為你的 Threads 帳號提供個人化的寫文分析與建議。",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "AK SEO Labs",
     "url": "https://threads.net/@darkseoking"
