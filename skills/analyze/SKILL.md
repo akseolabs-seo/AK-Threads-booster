@@ -57,6 +57,8 @@ Search the user's working directory for:
 
 Use all available files. If `brand_voice.md` exists, use it **for observation only** — to notice where the submitted post drifts from the user's own historical voice. Never use it to rewrite or pull the submission toward a brand_voice template. The heavy composition application of `brand_voice.md` belongs to `/draft`, not here.
 
+If `brand_voice.md` contains a `## Manual Refinements (user-edited)` section, treat those as strongest signal when flagging drift (e.g. a "not me" phrase appearing in the submitted post is a hard flag, not a soft one). But the rule against rewriting still applies — flag, do not rewrite.
+
 ### Path B: Partial system data
 
 If `threads_daily_tracker.json` exists but `style_guide.md` or `concept_library.md` is missing:
@@ -240,6 +242,7 @@ Present the analysis in this order.
 8. **Algorithm Signal Assessment**
 9. **AI-Tone Detection**
 10. **Reference Strength**
+11. **Questions for You (discussion-mode-gated)**
 
 ### Required content inside each section
 
@@ -346,6 +349,20 @@ State:
 - how many historical posts were available
 - how many comparable posts were actually used
 - which judgments are strong versus weak
+
+#### 11. Questions for You (discussion-mode-gated)
+
+Gated by `analyze.discussion_mode` from `threads_booster_config.json`. Canonical semantics (prompting, persistence): see `knowledge/_shared/config.md`.
+
+`/analyze` is read-only for the config file. If the user says "always on / always off" here, acknowledge for this run and point them to `/draft` (which has write permission) or manual edit.
+
+When the section runs, append 2-3 targeted questions whose answer would meaningfully change the take. Examples:
+
+- "You posted this at [time]. Was the timing intentional for [audience segment]? Your posts at [other-time] have historically done better."
+- "This is the third post in a row on [topic cluster]. Was that deliberate series framing, or accidental repetition?"
+- "The hook is softer than your top-quartile pattern. Was that a voice choice, or do you want me to propose sharper alternatives?"
+
+Questions must be specific to this post, not generic. Skip the section entirely if there is nothing genuinely worth asking.
 
 ---
 

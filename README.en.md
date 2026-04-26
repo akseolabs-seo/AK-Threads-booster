@@ -36,7 +36,7 @@ If the goal is to choose better topics, improve distribution odds, and stop wast
 Find the next most worthwhile topic by combining historical performance, comment demand, self-repetition risk, and external freshness.
 
 ### `/draft`
-Generate a draft from the user's brand voice, style guide, and historical data. It also runs a freshness gate before drafting so the user does not write into a dead topic by accident.
+Generate a draft from the user's brand voice, style guide, and historical data. Before drafting: a freshness gate, a fact-check that **never overrides the user's own stated personal facts or event chronology**, and a research step that surfaces 2-3 angles the user may not have considered. After drafting: 3-5 targeted questions to sharpen the post. All dialogue is toggleable via `threads_booster_config.json` (`ask` / `always_on` / `always_off`).
 
 ### `/analyze`
 Run decision-first analysis on a finished draft. It checks algorithm red lines, upside drivers, suppression risks, style fit, and AI-tone traces.
@@ -78,6 +78,14 @@ The tracker is the canonical file. The rest exist to make the data easier to use
 ```
 
 This builds the tracker first, then deepens the brand-voice layer for better drafting.
+
+`/voice` produces a **first-draft reference** `brand_voice.md`, not a verdict. An outside LLM always misses things the author knows about themselves. Expected usage:
+
+- Edit anywhere it feels wrong — your edits win.
+- Fill in the **Manual Refinements** section at the bottom with taboos, must-do rules, and "not me" phrases.
+- Re-runs of `/voice` preserve your edits and the Manual Refinements section.
+
+`/draft` treats Manual Refinements as hard constraints, ranked above other generated sections.
 
 ### Before posting
 

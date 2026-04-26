@@ -259,6 +259,20 @@ Use this structure:
 ### Cumulative Learning
 - Tracker now contains X posts
 - Calibration trend: [improving / stable / still noisy]
+
+### Draft-Time Decision Audit (if draft entries exist)
+- Read `threads_freshness.log` entries for this post's `run_id` if present.
+- List `user_decisions` recorded at draft time (e.g., `accepted_missed_angle: historical_parallel`, `dropped_claim: stat_X`).
+- For each, briefly note whether the outcome suggests the decision helped or hurt — advisory only, one line each.
+- If `personal_fact_conflicts` were flagged at draft time, check whether they affected how the post landed.
+
+### Questions for You (discussion-mode-gated)
+Gated by `review.discussion_mode`. Canonical semantics: `knowledge/_shared/config.md`. `/review` does not write the config file — if the user chooses a persistent mode here, point them to `/draft` or manual edit.
+
+When the section runs, append 2-3 specific questions that would sharpen the next post. Examples:
+  - "This post beat baseline by [X]%. Do you want me to lock in the hook pattern for the next 3 posts, or treat it as a one-off?"
+  - "The comment section skewed toward [topic]. Want the next post to follow that thread, or switch topics?"
+  - "At draft time you chose to drop claim [Y]. In hindsight, do you wish we had kept it? Affects how I handle similar calls next time."
 ```
 
 ---

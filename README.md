@@ -51,7 +51,14 @@ AK-Threads-Booster 是一套給 Threads 創作者用的 AI skill 系統。
 
 來起草一篇比較接近你語感的內容。
 
-而且它不是拿到題目就直接寫，前面還會先做 freshness gate，避免你花時間寫一個其實已經被寫爛的角度。
+而且它不是拿到題目就直接寫：
+
+- 先做 freshness gate，避免你花時間寫一個已經被寫爛的角度
+- 做 fact-check，但**不會動你自己說過的個人事實與事件順序**（你的貼文是 source of truth）
+- research 時會主動丟「你可能沒想到的 2-3 個角度」給你選，幫貼文變更豐富
+- 寫完以後會回問 3-5 個針對這篇的改進問題，不是罐頭提問
+
+這些對話功能都是開關式的——第一次會問你要不要開，也可以設成 always on / always off，存在 `threads_booster_config.json`。想要快就快，想要深就深。
 
 ### 3. 幫你在發文前做最後判斷
 
@@ -130,6 +137,14 @@ AK-Threads-Booster 是一套給 Threads 創作者用的 AI skill 系統。
 ```
 
 先把歷史資料整理好，再把 Brand Voice 建起來。
+
+`/voice` 產出的 `brand_voice.md` 是**參考初稿**，不是定稿。LLM 從外部看你的貼文一定會漏東西。建議：
+
+- 直接改檔案裡任何覺得不對的地方
+- 最下面的 **Manual Refinements** 區塊用來補分析漏掉的、你自己知道的細節（禁用詞、必做事項、「這不是我」的例子）
+- 重跑 `/voice` 會保留你改過的內容，不會覆蓋掉
+
+`/draft` 會把 Manual Refinements 當硬約束讀，優先級高於其他章節。
 
 ### 平常發文前
 
@@ -235,7 +250,18 @@ AK-Threads-booster/
 |  |- render_companions.py
 |- templates/
 |- examples/
+
+
 ```
+## Star History
+
+<a href="https://www.star-history.com/?repos=akseolabs-seo%2FAK-Threads-booster&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=akseolabs-seo/AK-Threads-booster&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=akseolabs-seo/AK-Threads-booster&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=akseolabs-seo/AK-Threads-booster&type=date&legend=top-left" />
+ </picture>
+
 
 ---
 
