@@ -37,3 +37,4 @@ desktop.ini
 # Environment variables / secrets
 .env
 .env.*
+.omx/

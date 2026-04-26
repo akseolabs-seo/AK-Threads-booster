@@ -136,6 +136,27 @@ That is a stronger and more honest product promise than claiming guaranteed resu
 
 ## Installation
 
+### Codex
+
+Clone the repo into your Codex skills directory, for example:
+
+```bash
+git clone https://github.com/akseolabs-seo/AK-Threads-booster.git ~/.codex/skills/AK-Threads-booster
+```
+
+Codex will read:
+
+- root `SKILL.md` as the skill entry point
+- `agents/openai.yaml` as Codex UI metadata
+
+After installation, invoke it with:
+
+```text
+$ak-threads-booster
+```
+
+Then route into `/setup`, `/topics`, `/draft`, `/analyze`, `/predict`, `/review`, or `/refresh` based on the task.
+
 ### Claude Code
 
 ```bash
@@ -158,6 +179,8 @@ Place the repo in the skill or plugin directory used by the target tool.
 AK-Threads-booster/
 |- SKILL.md
 |- AGENTS.md
+|- agents/
+|  |- openai.yaml
 |- skills/
 |  |- setup/SKILL.md
 |  |- refresh/SKILL.md
