@@ -1,0 +1,82 @@
+{
+  "account": {
+    "handle": "@testuser",
+    "source": "test_fixture",
+    "timezone": "Asia/Hong_Kong"
+  },
+  "last_updated": "2026-05-02T10:00:00Z",
+  "posts": [
+    {
+      "id": "p001",
+      "text": "Recent list-style post about AI tools",
+      "created_at": "2026-05-01T12:00:00Z",
+      "permalink": "https://threads.net/p001",
+      "content_type": "list",
+      "topics": ["AI", "tools"],
+      "hook_type": "question",
+      "ending_type": "cta",
+      "emotional_arc": "neutral-to-curious",
+      "word_count": 120,
+      "paragraph_count": 4,
+      "posting_time_slot": "afternoon",
+      "metrics": {"likes": 100, "replies": 20, "reposts": 5, "shares": 3},
+      "psychology_signals": {"ai_tone_flags": ["structural-perfection"]},
+      "algorithm_signals": {"risk_flags": ["over-promotional"]},
+      "comments": [{"author": "u1", "text": "great"}]
+    },
+    {
+      "id": "p002",
+      "text": "Older list post about productivity",
+      "created_at": "2026-03-15T09:00:00Z",
+      "permalink": "https://threads.net/p002",
+      "content_type": "list",
+      "topics": ["productivity"],
+      "hook_type": "question",
+      "ending_type": "open",
+      "emotional_arc": "rising",
+      "word_count": 200,
+      "paragraph_count": 5,
+      "posting_time_slot": "morning",
+      "metrics": {"likes": 300, "replies": 50, "reposts": 20, "shares": 10},
+      "psychology_signals": {"ai_tone_flags": []},
+      "algorithm_signals": {"risk_flags": []},
+      "comments": []
+    },
+    {
+      "id": "p003",
+      "text": "Story-style post about a personal experience",
+      "created_at": "2026-04-20T18:00:00Z",
+      "permalink": "https://threads.net/p003",
+      "content_type": "story",
+      "topics": ["AI", "experience"],
+      "hook_type": "shock",
+      "ending_type": "cta",
+      "emotional_arc": "rising-falling",
+      "word_count": 350,
+      "paragraph_count": 8,
+      "posting_time_slot": "evening",
+      "metrics": {"likes": 50, "replies": 5, "reposts": 1, "shares": 0},
+      "psychology_signals": {"ai_tone_flags": ["structural-perfection", "emoji-overuse"]},
+      "algorithm_signals": {"risk_flags": []},
+      "comments": []
+    },
+    {
+      "id": "p004",
+      "text": "Reply thread style post about coding",
+      "created_at": "2026-04-29T14:30:00Z",
+      "permalink": "https://threads.net/p004",
+      "content_type": "story",
+      "topics": ["coding", "AI"],
+      "hook_type": "question",
+      "ending_type": "open",
+      "emotional_arc": "neutral",
+      "word_count": 180,
+      "paragraph_count": 3,
+      "posting_time_slot": "afternoon",
+      "metrics": {"likes": 75, "replies": 12, "reposts": 3, "shares": 2},
+      "psychology_signals": {"ai_tone_flags": []},
+      "algorithm_signals": {"risk_flags": ["over-tagging"]},
+      "comments": []
+    }
+  ]
+}
