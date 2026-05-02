@@ -4,6 +4,59 @@ What changed in AK-Threads-Booster, in plain language.
 
 ---
 
+## Unreleased — Token redesign Phase 1
+
+### 每次 `/analyze`、`/predict`、`/draft` 都唔再食 100K+ token
+
+呢套 skill 之前每次 invoke 都會自動 load 三個大 knowledge file（psychology / algorithm / ai-detection 共 ~32K tokens）+ 成個 `threads_daily_tracker.json`（成 168KB / ~56K tokens）。實際分析 / 起稿時，通常只需要 knowledge 入面一兩段、tracker 入面 5-10 個 comparable post。**每次 invoke 開頭就食晒 ~95-110K token**，仲未 reason 你篇 post。
+
+Phase 1 redesign 嘅核心：**push knowledge out of context, into queryable tools**。
+
+- **新檔案 `tracker_summary.md`**（5KB markdown digest）— `/refresh` 跑完自動 generate。包含：top 10 alltime / top 10 last-30d / hook distribution / topic clusters / AI-tone signal frequencies / posting cadence / word-count quartiles / recent topic freshness。skills 而家讀呢個，唔再讀全本 tracker。
+- **新 CLI `scripts/tracker_query.py`** — 7 個 subcommand（recent / top / comparable / hook-stats / ai-tone-stats / post / meta），返 1-10 KB 結構化 JSON。需要 comparable set 嗰陣 query 一次，唔再 Read 全本 tracker。
+- **新 CLI `scripts/tracker_archive.py`** — `/refresh` 跑完之後自動將 60 日前嘅 post 移去 `archive/<YYYY>-<MM>.json`。Idempotent：冇舊 post 就 no-op。有 `top_performers_alltime[]` 留喺主 tracker，summary skill 唔會失去歷史錨點。
+- **新 CLI `scripts/build_tracker_summary.py`** — 重新生成 `tracker_summary.md`。`/refresh` 自動 call。
+
+**`/analyze`、`/predict`、`/review`、`/topics`、`/draft` SKILL.md 全部改晒。** 而家：
+
+1. 預設讀 `tracker_summary.md`（5KB），唔再 bulk-load 知識庫
+2. 需要 comparable post 嗰陣 call `tracker_query.py` 拎 1-10KB
+3. 知識文件變 reference material — 需要某個 signal 嗰陣先 Glob + Read --offset --limit 開到嗰段
+
+### Backwards compatible
+
+冇 break 任何嘢。如果你個 working dir 仲未有 `tracker_summary.md`（譬如未跑過新版 `/refresh`），skill 會 fallback 去舊嘅 full-Read 路徑，同時 print 一行 hint 叫你跑 `/refresh` upgrade。即係：
+
+- 舊 install — 行得，但慢，會見 hint
+- 新 install / 跑過 `/refresh` 之後 — 自動行 lean path
+
+### 量度
+
+A/B harness（`scripts/tests/ab_compare.py`）對住真實 plugin v1.1.0 + 真實 working dir 嘅 measurement：
+
+| Skill | Before | After | Reduction |
+|---|---|---|---|
+| `/analyze` | 118K tokens | 25K tokens | **78.4%** |
+| `/predict` | 115K tokens | 23K tokens | **80.2%** |
+| `/draft` | 118K tokens | 24K tokens | **79.6%** |
+| `/review` | 84K tokens | 23K tokens | **72.5%** |
+| `/topics` | 81K tokens | 22K tokens | **72.4%** |
+| **5 skills 加埋** | **~516K** | **~118K** | **77.2%** |
+
+唔係估算，係實際對住 file 大小量度。Output equivalence 要靠真 LLM call 對比驗證，呢 part 喺 PR review / 用家手動驗證階段做。
+
+### Tests
+
+新增 50 個 unittest case 覆蓋 4 個 script + A/B harness：
+- `test_tracker_query.py` — 22 cases
+- `test_tracker_archive.py` — 13 cases（包 idempotency、backup rotation、dry-run、comparable dedupe）
+- `test_build_tracker_summary.py` — 7 cases
+- `test_ab_compare.py` — 8 cases
+
+全部 green。
+
+---
+
 ## 2026-04-22
 
 ### `/draft` 變聰明了

@@ -252,6 +252,28 @@ Then:
 
 Companion regeneration failures are non-fatal. Note them in the summary, but do not roll back a successful tracker write.
 
+### Step 7.5: Post-merge derived outputs (Phase 1 token redesign)
+
+After the merged tracker is written, regenerate the derived files that other skills (`/analyze`, `/predict`, `/review`, `/topics`, `/draft`) read instead of the full tracker. This is what makes the lean baseline path work.
+
+Run from the working directory:
+
+```bash
+python <plugin>/scripts/tracker_archive.py
+python <plugin>/scripts/build_tracker_summary.py
+```
+
+`<plugin>` resolves via `Glob **/scripts/tracker_archive.py` (same pattern as the other scripts).
+
+Behavior:
+
+- `tracker_archive.py` — moves posts older than 60 days into `archive/<YYYY>-<MM>.json`. Idempotent: no-op when there are no aged-out posts. Maintains `top_performers_alltime[]` in the main tracker so summary skills always have historical anchors.
+- `build_tracker_summary.py` — writes `tracker_summary.md` (~5KB markdown digest with top-10 alltime + last-30d, hook distribution, topic clusters, AI-tone signal frequencies, posting cadence, word-count quartiles, recent topic freshness).
+
+Both scripts are non-destructive: they back up before mutating and rotate `.bak-<ISO>` files to keep 5 most recent.
+
+These post-merge calls are **non-fatal** — like companion regeneration. If either script fails, log the error and continue. The next `/refresh` will retry. Skills with the lean Path A will fall back to Path A-legacy (full tracker Read with upgrade hint) when `tracker_summary.md` is stale or missing.
+
 ### Step 8: Report
 
 Report in this shape:
