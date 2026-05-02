@@ -14,11 +14,9 @@ The goal is not to chase generic traffic. The goal is to find topics that fit th
 
 ## Principles and Knowledge
 
-Load `knowledge/_shared/principles.md` before recommending. Follow discovery order in `knowledge/_shared/discovery.md`. For `/topics`, also load:
+Load `knowledge/_shared/principles.md` before recommending. Follow discovery order in `knowledge/_shared/discovery.md`.
 
-- `psychology.md`
-- `algorithm.md`
-- `data-confidence.md`
+`psychology.md`, `algorithm.md`, and `data-confidence.md` are reference material — read targeted sections via Glob + `Read --offset --limit` only when a specific signal needs verification, not bulk-load. `data-confidence.md` is small (~70 lines) and may be read in full at the end to label confidence.
 
 Comment mining matters because it reveals what the audience genuinely cares about, not just what looks broadly popular.
 
@@ -26,13 +24,24 @@ Comment mining matters because it reveals what the audience genuinely cares abou
 
 ## User Data Paths
 
-Search the working directory for:
+### Path A: Lean (preferred)
 
-- `threads_daily_tracker.json`
-- `style_guide.md`
-- `concept_library.md`
+If `tracker_summary.md` exists, read it for the topic-frequency baseline and recent freshness window.
 
-If the tracker is missing, tell the user to run `/setup` first.
+For comment mining (Step 1), the tracker still has the richest data — comments are not summarized. Use `tracker_query.py recent --days 30 --include-comments` to pull a focused window of recent posts with comments, instead of a full tracker Read:
+
+```bash
+python scripts/tracker_query.py recent --days 30 --include-comments
+python scripts/tracker_query.py top --metric replies --limit 10
+```
+
+Read `style_guide.md` and `concept_library.md` if present.
+
+### Path A-legacy (fallback)
+
+If `tracker_summary.md` is missing, Read `threads_daily_tracker.json` once. Print the upgrade hint as in `/analyze`.
+
+If the tracker is missing entirely, tell the user to run `/setup` first.
 
 ---
 

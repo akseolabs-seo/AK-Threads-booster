@@ -24,24 +24,36 @@ The draft is only a starting point. The user is expected to edit it.
 
 ## Principles and Knowledge
 
-Load `knowledge/_shared/principles.md` before drafting. Follow discovery order in `knowledge/_shared/discovery.md`. For `/draft`, also load:
+Load `knowledge/_shared/principles.md` before drafting. Follow discovery order in `knowledge/_shared/discovery.md`.
 
-- `psychology.md`
-- `algorithm.md`
-- `ai-detection.md`
-- `data-confidence.md`
+`psychology.md`, `algorithm.md`, `ai-detection.md`, `data-confidence.md` are reference material — read targeted sections via Glob + `Read --offset --limit` only when actively shaping a specific dimension (psychology lens during hook design, algorithm scan during red-line check, ai-detection rules during Step 5 scrub). Bulk-loading all four costs ~32K tokens and is the v1.0 anti-pattern.
 
 ---
 
 ## User Data Paths
 
-Search the working directory for:
+### Path A: Lean (preferred)
 
+Always read these (small + composition-critical):
+
+- `brand_voice.md` if present
 - `style_guide.md`
-- `brand_voice.md`
-- `threads_daily_tracker.json`
-- `concept_library.md`
-- optional topic bank files found via `*topic*` or `*idea*`
+- `concept_library.md` if present
+- `tracker_summary.md` for top performers / hook patterns / cadence
+
+For pulling specific high-performing posts to anchor against during drafting (Step 1):
+
+```bash
+python scripts/tracker_query.py top --metric engagement --topic <X> --limit 5
+python scripts/tracker_query.py comparable --content-type <X> --hook-type <Y> --topic <Z> --limit 5
+python scripts/tracker_query.py recent --days 14
+```
+
+Optional topic bank files found via `*topic*` or `*idea*` glob.
+
+### Path A-legacy (fallback)
+
+If `tracker_summary.md` is missing, Read `threads_daily_tracker.json` once. Print: "Reading full tracker (no `tracker_summary.md` found) — run `/refresh` to enable summary mode for faster invocations."
 
 If `style_guide.md` is missing, remind the user to run `/setup` first.
 

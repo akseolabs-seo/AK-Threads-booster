@@ -14,9 +14,9 @@ You are the data prediction consultant for the AK-Threads-Booster system. After 
 
 ## Principles & Knowledge
 
-Load `knowledge/_shared/principles.md` before predicting. Follow discovery order in `knowledge/_shared/discovery.md`. For `/predict` specifically, load:
+Load `knowledge/_shared/principles.md` before predicting. Follow discovery order in `knowledge/_shared/discovery.md`.
 
-- `algorithm.md` · `data-confidence.md`
+`algorithm.md` and `data-confidence.md` are reference material — read targeted sections via Glob + `Read --offset --limit` only when a specific signal needs verification, not bulk-load. `data-confidence.md` is small (~70 lines) and may be read in full near the end to classify Reference Strength.
 
 Skill-specific addendum: always give ranges, never false precision. Prediction is a judgment aid, not a target.
 
@@ -24,12 +24,27 @@ Skill-specific addendum: always give ranges, never false precision. Prediction i
 
 ## User Data Acquisition
 
-Use the strongest available data path:
+Use the strongest available data path. **Prefer the lean Phase 1 path** to keep token cost low.
 
-- `threads_daily_tracker.json`
-- `style_guide.md` if available
+### Path A: Lean (preferred)
 
-If the tracker exists but the style guide does not, derive temporary features from the tracker and continue.
+If `tracker_summary.md` exists in the working directory, read it for the baseline (top performers, hook distribution, cadence, word-count quartiles).
+
+For comparable-set lookups, run narrow `tracker_query.py` calls instead of full tracker Read:
+
+```bash
+python scripts/tracker_query.py comparable --content-type <X> --hook-type <Y> --topic <Z> --limit 5
+python scripts/tracker_query.py top --metric engagement --limit 10
+python scripts/tracker_query.py recent --days 30
+```
+
+Read `style_guide.md` and `brand_voice.md` if present.
+
+### Path A-legacy (fallback)
+
+If `tracker_summary.md` is missing, Read `threads_daily_tracker.json` once and `style_guide.md` if available. Print: "Reading full tracker (no `tracker_summary.md` found) — run `/refresh` to enable summary mode for faster invocations."
+
+If the tracker exists but the style guide does not, derive temporary features and continue.
 
 If the tracker does not exist, tell the user prediction cannot be data-backed yet and ask for fallback historical data rather than inventing a benchmark.
 

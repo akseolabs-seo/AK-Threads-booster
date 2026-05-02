@@ -12,9 +12,9 @@ You are the data feedback consultant for the AK-Threads-Booster system. After a 
 
 ## Principles & Knowledge
 
-Load `knowledge/_shared/principles.md` before running feedback. Follow discovery order in `knowledge/_shared/discovery.md`. For `/review` specifically, load:
+Load `knowledge/_shared/principles.md` before running feedback. Follow discovery order in `knowledge/_shared/discovery.md`.
 
-- `algorithm.md` · `data-confidence.md`
+`algorithm.md` and `data-confidence.md` are reference material — read targeted sections via Glob + `Read --offset --limit` only when a specific signal needs verification, not bulk-load.
 
 Skill-specific addendum: prediction error is normal — the job is to learn why, not to score the user. One post should not override a stable historical trend.
 
@@ -22,13 +22,26 @@ Skill-specific addendum: prediction error is normal — the job is to learn why,
 
 ## User Data Paths
 
-Search for:
+`/review` is unusual: it both reads the tracker AND mutates it (writes back updated metrics + observations). The mutation step still requires the full tracker — that is unavoidable. But the **read-for-context** step can use the lean path.
 
-- `threads_daily_tracker.json`
-- `style_guide.md`
-- `concept_library.md`
+### Read-for-context (preferred)
 
-If the tracker is missing, tell the user to supply historical data or run `/setup` first.
+If `tracker_summary.md` exists, read it for cohort baselines (top performers, hook distribution).
+
+For pulling the specific post being reviewed and its comparable cohort, use narrow queries:
+
+```bash
+python scripts/tracker_query.py post --id <id>
+python scripts/tracker_query.py comparable --content-type <X> --hook-type <Y> --limit 5
+```
+
+Also read `style_guide.md` and `concept_library.md` if present.
+
+### Read-for-mutation
+
+When you reach the step that updates `threads_daily_tracker.json` (Step 4: Write performance window data), Read the full tracker once, mutate, write back. This is necessary and not avoidable in Phase 1.
+
+If the tracker is missing entirely, tell the user to supply historical data or run `/setup` first.
 
 ---
 
