@@ -34,11 +34,18 @@ If the user pastes a post whose format is deliberately non-standard (fragmented,
 
 Load `knowledge/_shared/principles.md` (Glob `**/knowledge/_shared/principles.md`) before generating output. No skill-specific overrides for `/analyze` — the shared principles govern.
 
-## Required knowledge files
+## Knowledge files — on-demand only
 
-Follow the discovery order in `knowledge/_shared/discovery.md` (Glob `**/knowledge/_shared/discovery.md`). For `/analyze` specifically, load:
+Knowledge files (`psychology.md`, `algorithm.md`, `ai-detection.md`, `data-confidence.md`) are reference material, not auto-load context. Bulk-loading all four costs ~32K tokens per invocation when typical analysis needs ~300 lines from one or two of them.
 
-- `psychology.md` · `algorithm.md` · `ai-detection.md` · `data-confidence.md`
+**Recommended access pattern:**
+1. As you progress through Steps 3-6 (style / psychology / algorithm / AI-tone), identify the specific signal categories you need to evaluate.
+2. Read only the relevant sections. Use `Glob **/knowledge/<file>.md` then `Read --offset --limit` to scope to the section, **not** a full Read.
+3. The `_shared/discovery.md` file lists which sections live in which file.
+
+If you find yourself about to Read all four knowledge files in full, stop — that is the v1.0 anti-pattern this redesign is fixing.
+
+For the data-confidence rubric specifically: that file is small (~70 lines) and is read in full near the end of the analysis to classify Reference Strength.
 
 ---
 
@@ -46,16 +53,42 @@ Follow the discovery order in `knowledge/_shared/discovery.md` (Glob `**/knowled
 
 Use the strongest available data path below. Do not fail just because full setup has not been completed.
 
-### Path A: Full system data (preferred)
+### Path A: Lean system data (preferred — Phase 1 redesign)
 
-Search the user's working directory for:
+Search the user's working directory for `tracker_summary.md`. If present, **read this instead of the full tracker**. It is a pre-computed ~5KB digest covering top performers (alltime + 30d), hook distribution, topic clusters, AI-tone signal frequencies, posting cadence, and word-count quartiles — sufficient for most decisions in Steps 3-5.
+
+Always read these companion files when present (each <30KB, structured user knowledge):
+
+- `style_guide.md`
+- `concept_library.md`
+- `brand_voice.md` if available
+
+For comparable-set lookups beyond what `tracker_summary.md` provides, run `tracker_query.py` from the plugin's `scripts/` dir against the user's working tracker. Examples:
+
+```bash
+python scripts/tracker_query.py comparable --content-type list --hook-type question --topic AI --limit 10
+python scripts/tracker_query.py top --metric engagement --topic <X> --limit 10
+python scripts/tracker_query.py post --id <id>
+```
+
+Each query returns 1-10KB of focused JSON instead of forcing a full tracker Read.
+
+If `tracker_summary.md` is missing (legacy install or first-run pre-`/refresh`), fall back to the legacy path below — both work; this skill is backwards compatible.
+
+### Path A-legacy: Full system data (still supported)
+
+If `tracker_summary.md` is not present, search for:
 
 - `threads_daily_tracker.json`
 - `style_guide.md`
 - `concept_library.md`
 - `brand_voice.md` if available
 
-Use all available files. If `brand_voice.md` exists, use it **for observation only** — to notice where the submitted post drifts from the user's own historical voice. Never use it to rewrite or pull the submission toward a brand_voice template. The heavy composition application of `brand_voice.md` belongs to `/draft`, not here.
+Use all available files. State at the start of the run: "Reading full tracker (no `tracker_summary.md` found) — run `/refresh` to enable summary mode for faster invocations."
+
+### `brand_voice.md` rules (apply to both Path A variants)
+
+If `brand_voice.md` exists, use it **for observation only** — to notice where the submitted post drifts from the user's own historical voice. Never use it to rewrite or pull the submission toward a brand_voice template. The heavy composition application of `brand_voice.md` belongs to `/draft`, not here.
 
 If `brand_voice.md` contains a `## Manual Refinements (user-edited)` section, treat those as strongest signal when flagging drift (e.g. a "not me" phrase appearing in the submitted post is a hard flag, not a soft one). But the rule against rewriting still applies — flag, do not rewrite.
 
@@ -63,12 +96,13 @@ If `brand_voice.md` contains a `## Manual Refinements (user-edited)` section, tr
 
 If `threads_daily_tracker.json` exists but `style_guide.md` or `concept_library.md` is missing:
 
-1. Read the tracker.
-2. Derive a lightweight working baseline from it during the current analysis:
+1. Prefer `tracker_query.py meta` + `tracker_query.py top --limit 10` + `tracker_query.py hook-stats` to derive a baseline (3-4 small queries are cheaper than one full tracker Read).
+2. Only fall back to a full tracker Read if `tracker_query.py` is not present (very old install).
+3. Derive a lightweight working baseline:
    - top-performing posts overall
    - top-performing posts within the same content type / hook type / topic
    - common hook types, ending patterns, word counts, and recent topic clusters
-3. State clearly that the style guide or concept library is missing, so the analysis has lower confidence.
+4. State clearly that the style guide or concept library is missing, so the analysis has lower confidence.
 
 ### Path C: No setup files
 
@@ -108,12 +142,19 @@ Extract and label:
 
 ### Step 2: Build Comparison Sets
 
-Construct these comparison sets from the user's history when possible:
+Construct these comparison sets from the user's history when possible. **Prefer narrow `tracker_query.py` calls over full tracker Read** — this is where the redesign saves the most tokens.
 
-1. **Nearest neighbors**: 3-5 posts most similar on content type, hook type, topic, word count, and emotional arc
-2. **Top-quartile reference set**: the user's top 25% posts by views, or by the strongest available proxy if views are missing
-3. **Recent repetition set**: the last 5-10 posts to measure topic freshness and collision risk
-4. **Semantic-cluster freshness set**: the recent posts that are semantically close even if the wording is different
+1. **Nearest neighbors**: 3-5 posts most similar on content type, hook type, topic, word count, and emotional arc.
+   - Query: `python scripts/tracker_query.py comparable --content-type <X> --hook-type <Y> --topic <Z> --limit 5`
+2. **Top-quartile reference set**: the user's top 25% posts by views, or by the strongest available proxy if views are missing.
+   - Query: `python scripts/tracker_query.py top --metric engagement --limit 10`
+   - Or read `top_performers_alltime[]` from `tracker_summary.md`.
+3. **Recent repetition set**: the last 5-10 posts to measure topic freshness and collision risk.
+   - Query: `python scripts/tracker_query.py recent --days 14`
+4. **Semantic-cluster freshness set**: the recent posts that are semantically close even if the wording is different.
+   - Use the top-30d table in `tracker_summary.md`, or `tracker_query.py recent --days 30`.
+
+If a `tracker_query.py` call is unavailable (very old install), Read the tracker once and derive sets in-memory; do not Read it multiple times for different sets.
 
 If one set cannot be built, say so explicitly and continue with the sets that are available.
 
