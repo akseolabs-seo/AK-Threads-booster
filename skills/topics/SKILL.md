@@ -2,7 +2,7 @@
 name: topics
 description: "Mine insights from comments and historical data to recommend the next worthwhile topics. Trigger words: 'topics', 'topic', '選題', '寫什麼'."
 version: "2.0.0"
-allowed-tools: Read, Grep, Glob, WebSearch
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash, WebSearch
 ---
 
 # AK-Threads-Booster Topic Recommendation Module
