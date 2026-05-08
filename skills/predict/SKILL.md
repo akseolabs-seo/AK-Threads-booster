@@ -2,7 +2,7 @@
 name: predict
 description: "Estimate likely 24-hour post performance from the user's historical data. Use after the user writes a post and wants a range estimate, upside view, or expectation check."
 version: "2.0.0"
-allowed-tools: Read, Write, Edit, Grep, Glob
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
 # AK-Threads-Booster Performance Prediction Module (M7)
