@@ -24,11 +24,19 @@ in the process listing.
 import argparse
 import json
 import os
-import shutil
 import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+
+# Make sibling scripts importable regardless of cwd.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _atomic import (  # noqa: E402  (post-sys.path)
+    atomic_write_json,
+    configure_utf8_stdout,
+    post_sort_key,
+)
 
 try:
     from fetch_threads import (
@@ -77,31 +85,13 @@ def load_tracker(tracker_path: str) -> dict:
 
 
 def save_tracker(tracker_path: str, tracker: dict) -> None:
-    """Write tracker JSON back to disk."""
-    with open(tracker_path, "w", encoding="utf-8") as fh:
-        json.dump(tracker, fh, ensure_ascii=False, indent=2)
+    """Write tracker JSON back to disk per templates/FAILSAFE.md.
 
-
-def backup_tracker(tracker_path: str, keep: int = 5) -> str:
-    """Copy the tracker to .bak-<ISO> and keep only the newest `keep` backups."""
-    path = Path(tracker_path)
-    if not path.exists():
-        return ""
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    backup_path = path.with_name(f"{path.name}.bak-{stamp}")
-    shutil.copy2(path, backup_path)
-
-    existing = sorted(
-        path.parent.glob(f"{path.name}.bak-*"),
-        key=lambda p: p.stat().st_mtime,
-        reverse=True,
-    )
-    for stale in existing[keep:]:
-        try:
-            stale.unlink()
-        except OSError:
-            pass
-    return str(backup_path)
+    Backup-then-atomic-rename is unconditional: a SIGKILL or OS reboot
+    mid-write must never leave the user's tracker truncated. See
+    `scripts/_atomic.atomic_write_json` for the contract.
+    """
+    atomic_write_json(tracker_path, tracker, backup=True, keep=5)
 
 
 def build_new_post_entry(thread: dict, token: str) -> dict:
@@ -175,7 +165,9 @@ def ingest_new_posts(tracker: dict, token: str) -> int:
         tracker.setdefault("posts", []).insert(0, entry)
 
     # Re-sort newest-first on created_at so the tracker stays ordered.
-    tracker["posts"].sort(key=lambda p: p.get("created_at", ""), reverse=True)
+    # ISO strings with mixed offsets (`+07:00` / `Z` / `+00:00`) compare
+    # wrong lexicographically — use the timezone-aware key from _atomic.
+    tracker["posts"].sort(key=post_sort_key, reverse=True)
     return len(new_threads)
 
 
@@ -264,6 +256,7 @@ def refresh_post(post: dict, token: str, update_comments: bool) -> None:
 
 
 def main() -> None:
+    configure_utf8_stdout()
     parser = argparse.ArgumentParser(
         description="Refresh tracker metrics and append snapshots via Threads API"
     )
@@ -312,7 +305,10 @@ def main() -> None:
     parser.add_argument(
         "--backup",
         action="store_true",
-        help="Write a .bak-<ISO> copy of the tracker before saving (keeps 5 most recent)",
+        help=(
+            "Deprecated: backup is now always on per templates/FAILSAFE.md. "
+            "Flag is accepted for backward compatibility with existing cron commands."
+        ),
     )
     args = parser.parse_args()
 
@@ -361,11 +357,7 @@ def main() -> None:
 
     tracker["last_updated"] = datetime.now(timezone.utc).isoformat()
 
-    print("[5/5] Writing tracker...")
-    if args.backup:
-        backup_path = backup_tracker(args.tracker)
-        if backup_path:
-            print(f"  Backup written to {backup_path}")
+    print("[5/5] Writing tracker (backup + atomic rename per FAILSAFE)...")
     save_tracker(args.tracker, tracker)
     print(
         f"Done. Refreshed {len(selected_posts)} post(s)"

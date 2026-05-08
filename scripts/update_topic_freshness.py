@@ -24,6 +24,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
+# Make sibling scripts importable regardless of cwd.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _atomic import atomic_write_json, configure_utf8_stdout  # noqa: E402
+
 
 WORD_RE = re.compile(r"[a-z0-9][a-z0-9_+-]{1,}")
 URL_RE = re.compile(r"https?://\S+")
@@ -53,8 +58,12 @@ def load_tracker(tracker_path: str) -> dict:
 
 
 def save_tracker(tracker_path: str, tracker: dict) -> None:
-    with open(tracker_path, "w", encoding="utf-8") as fh:
-        json.dump(tracker, fh, ensure_ascii=False, indent=2)
+    """Write tracker JSON back to disk per templates/FAILSAFE.md.
+
+    Backup-then-atomic-rename is unconditional. See
+    `scripts/_atomic.atomic_write_json`.
+    """
+    atomic_write_json(tracker_path, tracker, backup=True, keep=5)
 
 
 def parse_iso_datetime(timestamp: str) -> Optional[datetime]:
@@ -312,6 +321,7 @@ def summarize_clusters(clusters: Dict[int, List[int]], cluster_labels: Dict[int,
 
 
 def main() -> None:
+    configure_utf8_stdout()
     parser = argparse.ArgumentParser(
         description="Build semantic clusters and annotate topic freshness in the tracker"
     )
