@@ -224,7 +224,7 @@ def tracker_hash(path: Path) -> str:
 def shared_meta(tracker_path: Path, posts: List[Dict[str, Any]]) -> Dict[str, Any]:
     level, notes = confidence_level(posts)
     return {
-        "schema_version": "1.0.0",
+        "schema_version": "2.0.0",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source_tracker": tracker_path.name,
         "source_tracker_hash": tracker_hash(tracker_path),
