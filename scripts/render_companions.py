@@ -24,6 +24,11 @@ import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+# Make sibling scripts importable regardless of cwd.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _atomic import configure_utf8_stdout  # noqa: E402
 from typing import Any, Dict, List, Optional, Tuple
 
 
@@ -186,6 +191,7 @@ def render_comments(posts: List[Dict], tracker: Dict, notice: str, lang: str) ->
 
 
 def main(argv: Optional[List[str]] = None) -> int:
+    configure_utf8_stdout()
     ap = argparse.ArgumentParser(description="Render human-readable companion markdown files from the tracker JSON.")
     ap.add_argument("--tracker", required=True, help="Path to threads_daily_tracker.json")
     ap.add_argument("--output-dir", default=None, help="Where to write companion files (default: tracker's directory)")

@@ -24,7 +24,17 @@ import json
 import sys
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Optional
+
+# Make sibling scripts importable regardless of cwd.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _atomic import (  # noqa: E402  (post-sys.path)
+    atomic_write_json,
+    configure_utf8_stdout,
+    post_sort_key,
+)
 
 try:
     import requests
@@ -389,8 +399,10 @@ def build_tracker(threads: list, token: str, account_handle: str = "") -> dict:
         }
         posts.append(post)
 
-    # Sort by date, newest first
-    posts.sort(key=lambda p: p.get("created_at", ""), reverse=True)
+    # Sort by date, newest first.
+    # ISO strings with mixed offsets (`+07:00` / `Z` / `+00:00`) compare
+    # wrong lexicographically — use the timezone-aware key from _atomic.
+    posts.sort(key=post_sort_key, reverse=True)
 
     return {
         "account": {
@@ -420,6 +432,7 @@ def exchange_long_lived_token(short_token: str, app_secret: str) -> str:
 
 
 def main():
+    configure_utf8_stdout()
     parser = argparse.ArgumentParser(
         description="Fetch Threads historical posts via Meta Threads API"
     )
@@ -468,9 +481,8 @@ def main():
     handle = f"@{profile['username']}" if profile["username"] else ""
     tracker = build_tracker(threads, token, account_handle=handle)
 
-    # Write output
-    with open(args.output, "w", encoding="utf-8") as f:
-        json.dump(tracker, f, ensure_ascii=False, indent=2)
+    # Write output (backup + atomic rename per templates/FAILSAFE.md).
+    atomic_write_json(args.output, tracker, backup=True, keep=5)
 
     print(f"\nDone! Saved {len(tracker['posts'])} posts to {args.output}")
     print("Next step: Run /setup with your agent to generate your style guide and concept library.")

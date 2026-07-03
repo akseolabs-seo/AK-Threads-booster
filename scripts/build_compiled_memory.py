@@ -26,10 +26,16 @@ import hashlib
 import json
 import re
 import statistics
+import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
+
+# Make sibling scripts importable regardless of cwd.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _atomic import configure_utf8_stdout  # noqa: E402
 
 try:
     from build_voice_distillation import write_outputs as write_voice_outputs
@@ -719,6 +725,7 @@ def write_outputs(tracker_path: Path, output_dir: Path) -> None:
 
 
 def main() -> int:
+    configure_utf8_stdout()
     parser = argparse.ArgumentParser(description="Build low-token compiled memory from a Threads tracker.")
     parser.add_argument("--tracker", required=True, help="Path to threads_daily_tracker.json")
     parser.add_argument("--output-dir", default=None, help="Output directory. Defaults to ./compiled beside tracker.")

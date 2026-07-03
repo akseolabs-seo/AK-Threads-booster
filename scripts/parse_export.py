@@ -25,6 +25,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+# Make sibling scripts importable regardless of cwd.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from _atomic import (  # noqa: E402  (post-sys.path)
+    atomic_write_json,
+    configure_utf8_stdout,
+    post_sort_key,
+)
+
 try:
     from html.parser import HTMLParser
 except ImportError:
@@ -469,8 +478,10 @@ def parse_html_export(file_path: str) -> list:
 
 def build_tracker(posts: list) -> dict:
     """Build the standard tracker JSON."""
-    # Sort by date, newest first
-    posts.sort(key=lambda p: p.get("created_at", ""), reverse=True)
+    # Sort by date, newest first.
+    # ISO strings with mixed offsets compare wrong lexicographically —
+    # use the timezone-aware key from _atomic.
+    posts.sort(key=post_sort_key, reverse=True)
 
     return {
         "account": {
@@ -484,6 +495,7 @@ def build_tracker(posts: list) -> dict:
 
 
 def main():
+    configure_utf8_stdout()
     parser = argparse.ArgumentParser(
         description="Parse Meta data export into AK-Threads-Booster tracker format"
     )
@@ -539,8 +551,10 @@ def main():
     print("[3/3] Building tracker...")
     tracker = build_tracker(posts)
 
-    with open(args.output, "w", encoding="utf-8") as f:
-        json.dump(tracker, f, ensure_ascii=False, indent=2)
+    # Backup + atomic rename per templates/FAILSAFE.md. If --output
+    # points at an existing tracker, the user's data is backed up to
+    # `<output>.bak-<ISO>` before overwrite.
+    atomic_write_json(args.output, tracker, backup=True, keep=5)
 
     print(f"\nDone! Saved {len(tracker['posts'])} posts to {args.output}")
     print("Note: Meta data export does not include engagement metrics.")
